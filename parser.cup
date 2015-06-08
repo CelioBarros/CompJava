@@ -1,0 +1,55 @@
+package cup.example;
+
+import java_cup.runtime.*;
+import cup.example.Lexer;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+
+parser code {:
+  protected Lexer lexer;
+:}
+
+/* define how to connect to the scanner! */
+init with {:
+  ComplexSymbolFactory f = new ComplexSymbolFactory();
+  symbolFactory = f;
+  File file = new File("input.txt");
+  FileInputStream fis = null;
+  try {
+    fis = new FileInputStream(file);
+  } catch (IOException e) {
+    e.printStackTrace();
+  } 
+  lexer = new Lexer(f,fis);
+:};
+scan with {: return lexer.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+terminal PACKAGE, SEMI;
+terminal String LETTERMIN;
+
+/* Non terminals */
+non terminal init, compilation_unit, package_statement_opt, package_statement;
+non terminal String package_name;
+
+
+/* Precedences */
+
+/* The grammar rules */
+start with init;
+
+init ::= init compilation_unit:c
+		 ;
+
+compilation_unit ::= package_statement_opt 
+					 ;
+		
+package_statement_opt ::= package_statement | ;
+
+package_statement ::= PACKAGE package_name SEMI
+					  ;
+						
+package_name ::= LETTERMIN             {:System.out.println("deu certo"):}
+      			 ;
+      			 
