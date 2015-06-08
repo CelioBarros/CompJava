@@ -26,30 +26,43 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PACKAGE, POINT;
+terminal            SEMI, PACKAGE, POINT, IMPORT, MULT;
 terminal String     IDENTIFIER;
 
 /* Non terminals */
 non terminal            inicio;
-non terminal            compilation_unit, package_statement_opt, package_statement, package_name;
+non terminal            compilation_unit, package_statement_opt, package_statement, name;
+non terminal            import_statement_opt, import_statements, import_statement;
 
 /* Precedences */
 
 /* The grammar rules */
-inicio ::= inicio compilation_unit:c SEMI      {: System.out.println(c); :}
-            | compilation_unit:c SEMI                  {: System.out.println(c); :}
+inicio ::= inicio compilation_unit:c SEMI
+            | compilation_unit:c SEMI
             ;
             
-compilation_unit ::= package_statement_opt:p         {: RESULT = p; :}
-			;
+compilation_unit ::= package_statement_opt:p import_statement_opt:i
+			         ;
 			            
-package_statement_opt ::= package_statement:p         {: RESULT = p; :}
+package_statement_opt ::= package_statement:p         {: System.out.println(p); :}
 			|                                        
 			;
 			
-package_statement ::= PACKAGE package_name:p         {: RESULT = p; :}
+package_statement ::= PACKAGE name:n SEMI         {: RESULT = n; :}
 			;
 			
-package_name ::= IDENTIFIER:i                         {: RESULT = i; :}
-			| package_name:p POINT IDENTIFIER:i         {: RESULT = p + i; :}
+name ::= IDENTIFIER:i                         {: RESULT = i; :}
+			| name:n POINT IDENTIFIER:i         {: RESULT = n + i; :}
 			;
+			
+import_statement_opt ::= import_statements:i    {: System.out.println(i); :}
+							|
+							;
+
+import_statements ::= import_statement:i        {: RESULT = i; :}
+						| import_statements:i import_statement:s         {: RESULT = s; :}
+						;
+
+import_statement ::= IMPORT name:n SEMI       {: RESULT = n; :}
+						| IMPORT name:n POINT MULT SEMI       {: RESULT = n; :}
+						;

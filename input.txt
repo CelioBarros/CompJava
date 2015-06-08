@@ -1,3 +1,4 @@
-package aas;
-package aas;
-package aas.ramon.viado;
+package aas; import funciona;;
+package aas;;
+package aas.ramon.viado;;
+import funciona;;

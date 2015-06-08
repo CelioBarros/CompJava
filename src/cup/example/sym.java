@@ -9,8 +9,10 @@ package cup.example;
 public interface sym {
   /* terminals */
   public static final int POINT = 4;
+  public static final int MULT = 6;
+  public static final int IMPORT = 5;
   public static final int error = 1;
-  public static final int IDENTIFIER = 5;
+  public static final int IDENTIFIER = 7;
   public static final int SEMI = 2;
   public static final int PACKAGE = 3;
   public static final int EOF = 0;
@@ -20,6 +22,8 @@ public interface sym {
   "SEMI",
   "PACKAGE",
   "POINT",
+  "IMPORT",
+  "MULT",
   "IDENTIFIER"
   };
 }

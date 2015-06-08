@@ -81,8 +81,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   {Whitespace} {                              }
   ";"          { return symbolFactory.newSymbol("SEMI", SEMI); }
   "."          { return symbolFactory.newSymbol("POINT", POINT); }
+  "*"          { return symbolFactory.newSymbol("MULT", MULT); }
   "package"    { return symbolFactory.newSymbol("PACKAGE", PACKAGE); }
-  {ident}    { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
+  "import"     { return symbolFactory.newSymbol("IMPORT", IMPORT); }
+  {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
 
 
