@@ -26,30 +26,30 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal PACKAGE, SEMI;
-terminal String LETTERMIN;
+terminal            SEMI, PACKAGE, POINT;
+terminal String     IDENTIFIER;
 
 /* Non terminals */
-non terminal init, compilation_unit, package_statement_opt, package_statement;
-non terminal String package_name;
-
+non terminal            inicio;
+non terminal            compilation_unit, package_statement_opt, package_statement, package_name;
 
 /* Precedences */
 
 /* The grammar rules */
-start with init;
-
-init ::= init compilation_unit:c
-		 ;
-
-compilation_unit ::= package_statement_opt 
-					 ;
-		
-package_statement_opt ::= package_statement | ;
-
-package_statement ::= PACKAGE package_name SEMI
-					  ;
-						
-package_name ::= LETTERMIN             {:System.out.println("deu certo"):}
-      			 ;
-      			 
+inicio ::= inicio compilation_unit:c SEMI      {: System.out.println(c); :}
+            | compilation_unit:c SEMI                  {: System.out.println(c); :}
+            ;
+            
+compilation_unit ::= package_statement_opt:p         {: RESULT = p; :}
+			;
+			            
+package_statement_opt ::= package_statement:p         {: RESULT = p; :}
+			|                                        
+			;
+			
+package_statement ::= PACKAGE package_name:p         {: RESULT = p; :}
+			;
+			
+package_name ::= IDENTIFIER:i                         {: RESULT = i; :}
+			| package_name:p POINT IDENTIFIER:i         {: RESULT = p + i; :}
+			;

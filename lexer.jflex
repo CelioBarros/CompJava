@@ -57,8 +57,7 @@ import java.io.InputStreamReader;
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 Number     = [0-9]+
-Booleans   = true | false
-LetterMin  = [a-z]+
+Letters    = [a-z]+
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment}
@@ -81,16 +80,9 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
   {Whitespace} {                              }
   ";"          { return symbolFactory.newSymbol("SEMI", SEMI); }
-  "+"          { return symbolFactory.newSymbol("PLUS", PLUS); }
-  "-"          { return symbolFactory.newSymbol("MINUS", MINUS); }
-  "*"          { return symbolFactory.newSymbol("TIMES", TIMES); }
-  "n"          { return symbolFactory.newSymbol("UMINUS", UMINUS); }
-  "("          { return symbolFactory.newSymbol("LPAREN", LPAREN); }
-  ")"          { return symbolFactory.newSymbol("RPAREN", RPAREN); }
+  "."          { return symbolFactory.newSymbol("POINT", POINT); }
   "package"    { return symbolFactory.newSymbol("PACKAGE", PACKAGE); }
-  {Number}     { return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext())); }
-  {LetterMin}  { return symbolFactory.newSymbol("LETTERMIN", LETTERMIN, yytext()); }
-  
+  {ident}    { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
 
 
