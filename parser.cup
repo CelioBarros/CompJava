@@ -40,9 +40,9 @@ non terminal			class_declaration;
 non terminal			modifiers_opt, modifiers, modifier;
 non terminal			super_opt, super_cl, interfaces_opt, interfaces, interface_type_list;
 non terminal			field_aux, field_declaration;
+non terminal			static_initializer, statement_block;
 
 /* Precedences */
-precedence left modifiers_opt;
 
 /* The grammar rules */
 inicio ::= inicio compilation_unit SEMI
@@ -129,5 +129,12 @@ field_aux ::= LBRACE field_declaration RBRACE
 	;
 	
 field_declaration ::= name // declarar corretamente
+	| static_initializer
 	| SEMI
+	;
+	
+static_initializer ::= STATIC statement_block
+	;
+	
+statement_block ::= LBRACE name RBRACE // terminar
 	;
