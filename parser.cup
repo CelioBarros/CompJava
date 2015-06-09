@@ -37,11 +37,12 @@ non terminal            compilation_unit, package_statement_opt, package_stateme
 non terminal            import_statement_opt, import_statements, import_statement;
 non terminal            type_declarations_opt, type_declarations, type_declaration;
 non terminal			class_declaration;
-non terminal			modifiers, modifier;
+non terminal			modifiers_opt, modifiers, modifier;
 non terminal			super_opt, super_cl, interfaces_opt, interfaces, interface_type_list;
 non terminal			field_aux, field_declaration;
 
 /* Precedences */
+precedence left modifiers_opt;
 
 /* The grammar rules */
 inicio ::= inicio compilation_unit SEMI
@@ -83,13 +84,16 @@ type_declarations ::= type_declaration
 					;
 					
 type_declaration ::= class_declaration
-					| CLASS name IMPORT // interface_declaration
+					//| CLASS name IMPORT // interface_declaration
 					;
 
-class_declaration ::= modifiers CLASS IDENTIFIER super_opt interfaces_opt field_aux
-					| CLASS IDENTIFIER super_opt interfaces_opt field_aux
+class_declaration ::= modifiers_opt CLASS IDENTIFIER super_opt interfaces_opt field_aux
 					;
-									
+						
+
+modifiers_opt ::= modifiers
+		|
+		;
 modifiers ::= modifier
 		| modifiers modifier
 		;

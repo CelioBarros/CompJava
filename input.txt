@@ -3,7 +3,6 @@ package aas;;
 package aas.ramon.viado;;
 import funciona;;
 import teste;;
-class asdas import;;
 public class asdas {asda};;
 class asdas {asdasd};;
 protected static class asdas {asdasd};;
