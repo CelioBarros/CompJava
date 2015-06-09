@@ -26,43 +26,104 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PACKAGE, POINT, IMPORT, MULT;
+terminal            SEMI, PACKAGE, POINT, COMMA, IMPORT, MULT, CLASS, EXTENDS, IMPLEMENTS;
+terminal			PUBLIC, PROTECTED, PRIVATE, STATIC, ABSTRACT, FINAL, NATIVE, SYNCHRONIZED;
+terminal			TRANSIENT, VOLATILE, LBRACE, RBRACE;
 terminal String     IDENTIFIER;
 
 /* Non terminals */
 non terminal            inicio;
 non terminal            compilation_unit, package_statement_opt, package_statement, name;
 non terminal            import_statement_opt, import_statements, import_statement;
+non terminal            type_declarations_opt, type_declarations, type_declaration;
+non terminal			class_declaration;
+non terminal			modifiers, modifier;
+non terminal			super_opt, super_cl, interfaces_opt, interfaces, interface_type_list;
+non terminal			field_aux, field_declaration;
 
 /* Precedences */
 
 /* The grammar rules */
-inicio ::= inicio compilation_unit:c SEMI
-            | compilation_unit:c SEMI
+inicio ::= inicio compilation_unit SEMI
+            | compilation_unit SEMI
             ;
             
-compilation_unit ::= package_statement_opt:p import_statement_opt:i
+compilation_unit ::= package_statement_opt import_statement_opt type_declarations_opt
 			         ;
 			            
-package_statement_opt ::= package_statement:p         {: System.out.println(p); :}
+package_statement_opt ::= package_statement
 			|                                        
 			;
 			
-package_statement ::= PACKAGE name:n SEMI         {: RESULT = n; :}
+package_statement ::= PACKAGE name SEMI
 			;
 			
-name ::= IDENTIFIER:i                         {: RESULT = i; :}
-			| name:n POINT IDENTIFIER:i         {: RESULT = n + i; :}
+name ::= IDENTIFIER
+			| name POINT IDENTIFIER
 			;
 			
-import_statement_opt ::= import_statements:i    {: System.out.println(i); :}
+import_statement_opt ::= import_statements
 							|
 							;
 
-import_statements ::= import_statement:i        {: RESULT = i; :}
-						| import_statements:i import_statement:s         {: RESULT = s; :}
+import_statements ::= import_statement
+						| import_statements import_statement
 						;
 
-import_statement ::= IMPORT name:n SEMI       {: RESULT = n; :}
-						| IMPORT name:n POINT MULT SEMI       {: RESULT = n; :}
+import_statement ::= IMPORT name SEMI
+						| IMPORT name POINT MULT SEMI
 						;
+
+type_declarations_opt ::= type_declarations
+						|
+						;
+						
+type_declarations ::= type_declaration
+					| type_declarations type_declaration
+					;
+					
+type_declaration ::= class_declaration
+					| CLASS name IMPORT // interface_declaration
+					;
+
+class_declaration ::= modifiers CLASS IDENTIFIER super_opt interfaces_opt field_aux
+					| CLASS IDENTIFIER super_opt interfaces_opt field_aux
+					;
+									
+modifiers ::= modifier
+		| modifiers modifier
+		;
+		
+modifier ::= PUBLIC
+		| PROTECTED
+		| PRIVATE
+		| STATIC
+		| ABSTRACT
+		| FINAL
+		| NATIVE
+		| SYNCHRONIZED
+		| TRANSIENT
+		| VOLATILE
+		;
+		
+super_cl ::= EXTENDS name
+	;
+super_opt ::= super_cl	
+	|
+	;
+	
+interfaces ::= IMPLEMENTS interface_type_list
+	;
+interfaces_opt ::= interfaces
+	|
+	;
+interface_type_list ::= name
+	| interface_type_list COMMA name
+	;
+	
+field_aux ::= LBRACE field_declaration RBRACE
+	;
+	
+field_declaration ::= name // declarar corretamente
+	| SEMI
+	;

@@ -57,13 +57,14 @@ import java.io.InputStreamReader;
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 Number     = [0-9]+
-Letters    = [a-z]+
 
 /* comments */
-Comment = {TraditionalComment} | {EndOfLineComment}
+Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 TraditionalComment = "/*" {CommentContent} \*+ "/"
 EndOfLineComment = "//" [^\r\n]* {Newline}
 CommentContent = ( [^*] | \*+[^*/] )*
+DocumentationComment = "/*" "*"+ [^/*] ~"*/"
+
 
 ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
@@ -82,8 +83,25 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   ";"          { return symbolFactory.newSymbol("SEMI", SEMI); }
   "."          { return symbolFactory.newSymbol("POINT", POINT); }
   "*"          { return symbolFactory.newSymbol("MULT", MULT); }
+  ","          { return symbolFactory.newSymbol("COMMA", COMMA); }
+  "{"          { return symbolFactory.newSymbol("LBRACE", LBRACE); }
+  "}"          { return symbolFactory.newSymbol("RBRACE", RBRACE); }
   "package"    { return symbolFactory.newSymbol("PACKAGE", PACKAGE); }
   "import"     { return symbolFactory.newSymbol("IMPORT", IMPORT); }
+  "class"      { return symbolFactory.newSymbol("CLASS", CLASS); }
+  "public"     { return symbolFactory.newSymbol("PUBLIC", PUBLIC); }
+  "protected"  { return symbolFactory.newSymbol("PROTECTED", PROTECTED); }
+  "private"    { return symbolFactory.newSymbol("PRIVATE", PRIVATE); }
+  "static"     { return symbolFactory.newSymbol("STATIC", STATIC); }
+  "abstract"   { return symbolFactory.newSymbol("ABSTRACT", ABSTRACT); }
+  "final"      { return symbolFactory.newSymbol("FINAL", FINAL); }
+  "native"     { return symbolFactory.newSymbol("NATIVE", NATIVE); }
+  "synchronized"     { return symbolFactory.newSymbol("SYNCHRONIZED", SYNCHRONIZED); }
+  "transient"  { return symbolFactory.newSymbol("TRANSIENT", TRANSIENT); }
+  "volatile"   { return symbolFactory.newSymbol("VOLATILE", VOLATILE); }
+  "extends"    { return symbolFactory.newSymbol("EXTENDS", EXTENDS); }
+  "implements" { return symbolFactory.newSymbol("IMPLEMENTS", IMPLEMENTS); }
+  {Comment}    { /* ignore */ }
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
 

@@ -3,7 +3,6 @@ bit_expression
 casting_expression
 character
 class_declaration
-compilation_unit
 constructor_declaration
 creating_expression
 decimal_digits
@@ -21,7 +20,6 @@ interface_declaration
 literal_expression
 logical_expression
 method_declaration
-modifier
 numeric_expression
 parameter
 parameter_list
