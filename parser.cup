@@ -8,6 +8,38 @@ import java.io.FileInputStream;
 
 parser code {:
   protected Lexer lexer;
+  
+  
+  public void report_error(String message, Object info) {
+   StringBuffer m = new StringBuffer("Erro encontrado na ");
+
+String token = "";
+
+if (info instanceof java_cup.runtime.Symbol) {
+           java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+           token = s.value+"";
+           if (s.left >= 0) {
+               /* Add to the end of the StringBuffer error message
+                  the line number of the error in the input. */
+               m.append("linha "+(s.left));  
+               /* Check if the column number in the input is greater
+                  or equal to zero. */
+               if (s.right >= 0)                    
+                   /* Add to the end of the StringBuffer error message
+                      the column number of the error in the input. */
+                   m.append(", coluna "+(s.right));
+           }
+       }
+       m.append(" : "+message);
+       System.err.println(m);
+ }
+ 
+ public void report_fatal_error(String message, Object info) {
+   report_error(message, info);
+   throw new RuntimeException("Erro fatal.");
+ }
+ 
+ 
 :}
 
 /* define how to connect to the scanner! */

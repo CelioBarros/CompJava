@@ -108,4 +108,9 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
 
 // error fallback
-.|\n          { emit_warning("Unrecognized character '" +yytext()+"' -- ignored"); }
+
+/* error fallback */
+{Number}{ident} { throw new RuntimeException("Variável não pode começar com número em \""+yytext()+
+                                                             "\" na linha "+yyline+", coluna "+yycolumn); }
+[^]|\n                             { throw new RuntimeException("Caractere inválido \""+yytext()+
+                                                             "\" na linha "+yyline+", coluna "+yycolumn); }
