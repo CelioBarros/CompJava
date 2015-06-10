@@ -3,8 +3,3 @@ package aas;;
 package aas.ramon.viado;;
 import funciona;;
 import teste;;
-class public asdas {asda};;
-class asdas {asdasd};;
-protected static class asdas {asdasd};;
-protected class asdas extends casa {asdasdasd};;
-private class teste extends casa implements dormir {asdasd};;

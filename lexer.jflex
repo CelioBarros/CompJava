@@ -86,6 +86,35 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   ","          { return symbolFactory.newSymbol("COMMA", COMMA); }
   "{"          { return symbolFactory.newSymbol("LBRACE", LBRACE); }
   "}"          { return symbolFactory.newSymbol("RBRACE", RBRACE); }
+  "["          { return symbolFactory.newSymbol("LBRACK", LBRACK); }
+  "]"          { return symbolFactory.newSymbol("RBRACK", RBRACK); }
+  "="          { return symbolFactory.newSymbol("EQ", EQ); }
+  "-"          { return symbolFactory.newSymbol("MINUS", MINUS); }
+  "--"         { return symbolFactory.newSymbol("MINUSMINUS", MINUSMINUS); }
+  "+"          { return symbolFactory.newSymbol("PLUS", PLUS); }
+  "++"         { return symbolFactory.newSymbol("PLUSPLUS", PLUSPLUS); }
+  "+="         { return symbolFactory.newSymbol("PLUSEQ", PLUSEQ); }
+  "-="         { return symbolFactory.newSymbol("MINUSEQ", MINUSEQ); }
+  "*="         { return symbolFactory.newSymbol("MULTEQ", MULTEQ); }
+  "/"          { return symbolFactory.newSymbol("DIV", DIV); }
+  "/="         { return symbolFactory.newSymbol("DIVEQ", DIVEQ); }
+  "%"          { return symbolFactory.newSymbol("MOD", MOD); }
+  "%="         { return symbolFactory.newSymbol("MODEQ", MODEQ); }
+  ">"          { return symbolFactory.newSymbol("GT", GT); }
+  "<"          { return symbolFactory.newSymbol("LT", LT); }
+  ">="         { return symbolFactory.newSymbol("GTEQ", GTEQ); }
+  "<="         { return symbolFactory.newSymbol("LTEQ", LTEQ); }
+  "=="         { return symbolFactory.newSymbol("EQEQ", EQEQ); }
+  "!="         { return symbolFactory.newSymbol("NOTEQ", NOTEQ); }
+  "!"          { return symbolFactory.newSymbol("NOT", NOT); }
+  "?"          { return symbolFactory.newSymbol("QUESTION", QUESTION); }
+  ":"          { return symbolFactory.newSymbol("COLON", COLON); }
+  "|"          { return symbolFactory.newSymbol("OR", OR); }
+  "||"         { return symbolFactory.newSymbol("OROR", OROR); }
+  "|="         { return symbolFactory.newSymbol("OREQ", OREQ); }
+  "||="        { return symbolFactory.newSymbol("OROREQ", OROREQ); }
+  "^"          { return symbolFactory.newSymbol("XOR", XOR); }
+  "^="         { return symbolFactory.newSymbol("XOREQ", XOREQ); }
   "package"    { return symbolFactory.newSymbol("PACKAGE", PACKAGE); }
   "import"     { return symbolFactory.newSymbol("IMPORT", IMPORT); }
   "class"      { return symbolFactory.newSymbol("CLASS", CLASS); }
@@ -101,6 +130,17 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "volatile"   { return symbolFactory.newSymbol("VOLATILE", VOLATILE); }
   "extends"    { return symbolFactory.newSymbol("EXTENDS", EXTENDS); }
   "implements" { return symbolFactory.newSymbol("IMPLEMENTS", IMPLEMENTS); }
+  "boolean"    { return symbolFactory.newSymbol("BOOLEAN", BOOLEAN); }
+  "byte"       { return symbolFactory.newSymbol("BYTE", BYTE); } 
+  "char"       { return symbolFactory.newSymbol("CHAR", CHAR); }
+  "short"      { return symbolFactory.newSymbol("SHORT", SHORT); } 
+  "int"        { return symbolFactory.newSymbol("INT", INT); }
+  "float"      { return symbolFactory.newSymbol("FLOAT", FLOAT); } 
+  "long"       { return symbolFactory.newSymbol("LONG", LONG); } 
+  "true"       { return symbolFactory.newSymbol("TRUE", TRUE); }
+  "false"      { return symbolFactory.newSymbol("FALSE", FALSE); }
+  "ampersand"  { return symbolFactory.newSymbol("AMPERSAND", AMPERSAND); }
+  "ampersand=" { return symbolFactory.newSymbol("AMPERSANDEQ", AMPERSANDEQ); }
   {Comment}    { /* ignore */ }
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }

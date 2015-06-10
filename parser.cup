@@ -9,36 +9,7 @@ import java.io.FileInputStream;
 parser code {:
   protected Lexer lexer;
   
-  
-  public void report_error(String message, Object info) {
-   StringBuffer m = new StringBuffer("Erro encontrado na ");
 
-String token = "";
-
-if (info instanceof java_cup.runtime.Symbol) {
-           java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-           token = s.value+"";
-           if (s.left >= 0) {
-               /* Add to the end of the StringBuffer error message
-                  the line number of the error in the input. */
-               m.append("linha "+(s.left));  
-               /* Check if the column number in the input is greater
-                  or equal to zero. */
-               if (s.right >= 0)                    
-                   /* Add to the end of the StringBuffer error message
-                      the column number of the error in the input. */
-                   m.append(", coluna "+(s.right));
-           }
-       }
-       m.append(" : "+message);
-       System.err.println(m);
- }
- 
- public void report_fatal_error(String message, Object info) {
-   report_error(message, info);
-   throw new RuntimeException("Erro fatal.");
- }
- 
  
 :}
 
@@ -60,7 +31,11 @@ scan with {: return lexer.next_token(); :};
 /* Terminals (tokens returned by the scanner). */
 terminal            SEMI, PACKAGE, POINT, COMMA, IMPORT, MULT, CLASS, EXTENDS, IMPLEMENTS;
 terminal			PUBLIC, PROTECTED, PRIVATE, STATIC, ABSTRACT, FINAL, NATIVE, SYNCHRONIZED;
-terminal			TRANSIENT, VOLATILE, LBRACE, RBRACE;
+terminal			TRANSIENT, VOLATILE, LBRACE, RBRACE, LBRACK, RBRACK, EQ, MOD, MODEQ, NOT;
+terminal			MINUS, MINUSMINUS, PLUS, PLUSPLUS, PLUSEQ, MINUSEQ, MULTEQ, DIV, DIVEQ;
+terminal			GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
+terminal			TRUE, FALSE, QUESTION, COLON, AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ;
+terminal			BOOLEAN, BYTE, CHAR, SHORT, INT, FLOAT, LONG, DOUBLE, XOREQ, XOR;
 terminal String     IDENTIFIER;
 
 /* Non terminals */
@@ -71,10 +46,28 @@ non terminal            type_declarations_opt, type_declarations, type_declarati
 non terminal			class_declaration;
 non terminal			modifiers_opt, modifiers, modifier;
 non terminal			super_opt, super_cl, interfaces_opt, interfaces, interface_type_list;
-non terminal			field_aux, field_declaration;
-non terminal			static_initializer, statement_block;
+non terminal			field_aux, field_declaration, field_declarations_opt, field_declarations;
+non terminal			static_initializer;
+non terminal			statement_block, statements_opt, statements, statement;
+non terminal			variable_declaration, variable_declarator, variable_initializer_opt;
+non terminal			variable_initializer, variable_initializers, array_initializer;
+non terminal			type, type_specifier;
+non terminal			bracks_opt, bracks, brack;
+non terminal			expression, numeric_expression, num_const;
+non terminal			testing_expression, test_const, logical_expression, logical_const;
 
 /* Precedences */
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
+precedence left MOD;
+precedence right PLUSEQ, MINUSEQ;
+precedence right MULTEQ, DIVEQ;
+precedence right MODEQ;
+precedence right PLUSPLUS, MINUSMINUS;
+
+precedence left GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
+
+precedence right AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ, XOR, XOREQ;
 
 /* The grammar rules */
 inicio ::= inicio compilation_unit SEMI
@@ -157,7 +150,15 @@ interface_type_list ::= name
 	| interface_type_list COMMA name
 	;
 	
-field_aux ::= LBRACE field_declaration RBRACE
+field_aux ::= LBRACE field_declarations_opt RBRACE
+	;
+	
+field_declarations_opt ::= field_declarations
+	|
+	;
+	
+field_declarations ::= field_declaration
+	| field_declarations field_declaration
 	;
 	
 field_declaration ::= name // declarar corretamente
@@ -168,5 +169,150 @@ field_declaration ::= name // declarar corretamente
 static_initializer ::= STATIC statement_block
 	;
 	
-statement_block ::= LBRACE name RBRACE // terminar
+statement_block ::= LBRACE statements_opt RBRACE
 	;
+	
+statements_opt ::= statements
+	|
+	;
+statements ::= statement
+	| statements statement
+	;
+	
+statement ::= variable_declaration
+/*      | ( expression ";" ) 
+      | ( statement_block ) 
+      | ( if_statement ) 
+      | ( do_statement ) 
+      | ( while_statement ) 
+      | ( for_statement ) 
+      | ( try_statement ) 
+      | ( switch_statement ) 
+      | ( "synchronized" "(" expression ")" statement ) 
+      | ( "return" [ expression ] ";" ) 
+      | ( "throw" expression ";" ) 
+      | ( identifier ":" statement ) 
+      | ( "break" [ identifier ] ";" ) 
+      | ( "continue" [ identifier ] ";" ) 
+      | ( ";" )  */
+	;	
+
+variable_declaration ::= modifiers_opt type variable_declarator // terminar
+	;
+
+type ::= type_specifier bracks_opt
+	;
+	
+type_specifier ::= BOOLEAN
+	| BYTE
+	| CHAR
+	| SHORT
+	| INT
+	| FLOAT
+	| LONG
+	| DOUBLE
+	| name
+	;
+	
+bracks_opt ::= bracks
+	|
+	;
+	
+bracks ::= brack
+	| bracks brack
+	;
+	
+brack ::= LBRACK RBRACK
+	;
+	
+variable_declarator ::= IDENTIFIER bracks_opt variable_initializer_opt
+	;
+
+variable_initializer_opt ::= EQ variable_initializer
+	|
+	;
+
+variable_initializer ::= expression
+	| array_initializer
+	;
+	
+array_initializer ::= LBRACE variable_initializers COMMA RBRACE
+	|	LBRACE variable_initializers RBRACE
+	|	LBRACE RBRACE
+	;
+	
+variable_initializers ::= variable_initializer
+	|	variable_initializers COMMA variable_initializer
+	;
+	
+expression ::= numeric_expression        // AJEITAR 
+	| testing_expression
+	| logical_expression
+	/* | string_expression               // ACABAR 
+      | bit_expression 
+      | casting_expression 
+      | creating_expression 
+      | literal_expression 
+      | "null" 
+      | "super" 
+      | "this" 
+      | identifier 
+      | ( "(" expression ")" ) 
+      | ( expression 
+      ( ( "(" [ arglist ] ")" ) 
+      | ( "[" expression "]" ) 
+      | ( "." expression ) 
+      | ( "," expression ) 
+      | ( "instanceof" ( class_name | interface_name ) ) 
+      ) )*/
+    ;
+      
+numeric_expression ::= MINUS expression 
+      | PLUSPLUS expression
+      | MINUSMINUS expression 
+      | expression PLUSPLUS 
+      | expression MINUSMINUS
+      | expression num_const expression
+      ;
+
+num_const ::= PLUS
+      | PLUSEQ
+      | MINUS
+      | MINUSEQ
+      | MULT
+      | MULTEQ
+      | DIV
+      | DIVEQ
+      | MOD
+      | MODEQ
+      ;
+      
+testing_expression ::= expression test_const expression
+	;
+	
+test_const ::= GT
+	| LT
+	| GTEQ
+	| LTEQ
+	| EQEQ
+	| NOTEQ
+	;
+	
+logical_expression ::= NOT expression 
+      | expression logical_const expression
+      | expression QUESTION expression COLON expression 
+      | TRUE
+      | FALSE 
+      ;
+      
+logical_const ::= AMPERSAND
+      | AMPERSANDEQ
+      | OR 
+      | OREQ
+      | XOR 
+      | XOREQ 
+      | AMPERSAND AMPERSAND 
+      | OROREQ
+      | MOD 
+      | MODEQ
+      ;

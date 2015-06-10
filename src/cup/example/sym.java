@@ -8,30 +8,58 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int IMPORT = 6;
-  public static final int CLASS = 8;
-  public static final int RBRACE = 22;
-  public static final int PRIVATE = 13;
-  public static final int SEMI = 2;
-  public static final int NATIVE = 17;
-  public static final int IDENTIFIER = 23;
-  public static final int POINT = 4;
-  public static final int LBRACE = 21;
-  public static final int PUBLIC = 11;
-  public static final int VOLATILE = 20;
-  public static final int STATIC = 14;
-  public static final int IMPLEMENTS = 10;
-  public static final int COMMA = 5;
-  public static final int PROTECTED = 12;
-  public static final int EOF = 0;
+  public static final int DIVEQ = 36;
+  public static final int PLUSPLUS = 31;
+  public static final int SHORT = 46;
+  public static final int GTEQ = 39;
   public static final int MULT = 7;
-  public static final int TRANSIENT = 19;
-  public static final int FINAL = 16;
-  public static final int error = 1;
+  public static final int CHAR = 45;
+  public static final int LTEQ = 40;
+  public static final int MODEQ = 27;
+  public static final int DOUBLE = 50;
+  public static final int SEMI = 2;
+  public static final int PRIVATE = 13;
+  public static final int INT = 47;
+  public static final int MINUS = 28;
+  public static final int STATIC = 14;
+  public static final int LT = 38;
+  public static final int COMMA = 5;
+  public static final int CLASS = 8;
+  public static final int DIV = 35;
+  public static final int PLUSEQ = 32;
+  public static final int MINUSEQ = 33;
+  public static final int PLUS = 30;
+  public static final int BOOLEAN = 43;
   public static final int ABSTRACT = 15;
-  public static final int SYNCHRONIZED = 18;
+  public static final int EOF = 0;
+  public static final int MINUSMINUS = 29;
+  public static final int error = 1;
+  public static final int TRANSIENT = 19;
+  public static final int EQEQ = 41;
+  public static final int MULTEQ = 34;
+  public static final int MOD = 26;
+  public static final int EQ = 25;
+  public static final int BYTE = 44;
+  public static final int LBRACK = 23;
+  public static final int IMPORT = 6;
+  public static final int LBRACE = 21;
+  public static final int NATIVE = 17;
+  public static final int PROTECTED = 12;
+  public static final int POINT = 4;
+  public static final int RBRACK = 24;
   public static final int PACKAGE = 3;
+  public static final int FINAL = 16;
+  public static final int FLOAT = 48;
+  public static final int PUBLIC = 11;
+  public static final int RBRACE = 22;
   public static final int EXTENDS = 9;
+  public static final int LONG = 49;
+  public static final int VOLATILE = 20;
+  public static final int SYNCHRONIZED = 18;
+  public static final int GT = 37;
+  public static final int IMPLEMENTS = 10;
+  public static final int NOTEQ = 42;
+  public static final int IDENTIFIER = 51;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -56,6 +84,34 @@ public interface sym {
   "VOLATILE",
   "LBRACE",
   "RBRACE",
+  "LBRACK",
+  "RBRACK",
+  "EQ",
+  "MOD",
+  "MODEQ",
+  "MINUS",
+  "MINUSMINUS",
+  "PLUS",
+  "PLUSPLUS",
+  "PLUSEQ",
+  "MINUSEQ",
+  "MULTEQ",
+  "DIV",
+  "DIVEQ",
+  "GT",
+  "LT",
+  "GTEQ",
+  "LTEQ",
+  "EQEQ",
+  "NOTEQ",
+  "BOOLEAN",
+  "BYTE",
+  "CHAR",
+  "SHORT",
+  "INT",
+  "FLOAT",
+  "LONG",
+  "DOUBLE",
   "IDENTIFIER"
   };
 }
