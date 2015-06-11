@@ -18,7 +18,6 @@ if_statement
 integer_literal
 interface_declaration
 literal_expression
-logical_expression
 method_declaration
 parameter
 parameter_list

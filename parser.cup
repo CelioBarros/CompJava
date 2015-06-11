@@ -60,12 +60,13 @@ non terminal			testing_expression, test_const, logical_expression, logical_const
 precedence left PLUS, MINUS;
 precedence left MULT, DIV;
 precedence left MOD;
+precedence left NOT; 
 precedence right PLUSEQ, MINUSEQ;
 precedence right MULTEQ, DIVEQ;
 precedence right MODEQ;
 precedence right PLUSPLUS, MINUSMINUS;
 
-precedence left GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
+precedence left GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ, QUESTION;
 
 precedence right AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ, XOR, XOREQ;
 
@@ -299,7 +300,7 @@ test_const ::= GT
 	;
 	
 logical_expression ::= NOT expression 
-      | expression logical_const expression
+      | logical_expression logical_const expression
       | expression QUESTION expression COLON expression 
       | TRUE
       | FALSE 
@@ -313,6 +314,6 @@ logical_const ::= AMPERSAND
       | XOREQ 
       | AMPERSAND AMPERSAND 
       | OROREQ
-      | MOD 
+      | MOD
       | MODEQ
       ;
