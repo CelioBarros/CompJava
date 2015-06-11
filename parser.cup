@@ -37,7 +37,10 @@ terminal			GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
 terminal			COMP, RSHIFTEQ, RSHIFT, SSHIFT, LSHIFT, LPAREN, RPAREN, NEW;
 terminal			TRUE, FALSE, QUESTION, COLON, AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ;
 terminal			BOOLEAN, BYTE, CHAR, SHORT, INT, FLOAT, LONG, DOUBLE, XOREQ, XOR;
+terminal			INTEGER_LITERAL, INTEGER_LITERAL_LONG, HEX_LITERAL, HEX_LITERAL_LONG, OCT_LITERAL, OCT_LITERAL_LONG, FLOAT_LITERAL;
 terminal String     IDENTIFIER;
+terminal Character	CHARACTER_LITERAL;
+terminal String 	STRING_LITERAL;
 
 /* Non terminals */
 non terminal            inicio;
@@ -58,6 +61,7 @@ non terminal			expression, numeric_expression, num_const, brack_list_opt, brack_
 non terminal			testing_expression, test_const, logical_expression, logical_const;
 non terminal			string_expression, bit_expression, bit_const, casting_expression;
 non terminal			creating_expression, creating_expression_alt, arglist, array_expression_opt;
+non terminal			literal_expression, integer_literal_desc, string;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -257,8 +261,8 @@ expression ::= numeric_expression
     | bit_expression
     | casting_expression 
     | creating_expression 
-    /* | literal_expression // ACABAR 
-      | "null" 
+    | literal_expression 
+    /*| "null"           // ACABAR 
       | "super" 
       | "this" 
       | identifier 
@@ -362,3 +366,18 @@ brack_list_opt ::= brack_list
 brack_list ::= LBRACK RBRACK
 	| brack_list LBRACK RBRACK
 	;
+
+literal_expression ::= integer_literal_desc 
+    | FLOAT_LITERAL
+    | STRING_LITERAL 
+    | CHARACTER_LITERAL
+    ;
+
+integer_literal_desc ::= INTEGER_LITERAL
+	| INTEGER_LITERAL_LONG
+	| HEX_LITERAL
+	| HEX_LITERAL_LONG
+	| OCT_LITERAL
+	| OCT_LITERAL_LONG
+	;
+

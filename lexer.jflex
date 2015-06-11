@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 %char
 %{
 	
-
+	StringBuffer string = new StringBuffer();
     public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
 		this(is);
         symbolFactory = sf;
@@ -52,11 +52,47 @@ import java.io.InputStreamReader;
     	System.out.println("scanner error: " + message + " at : 2" + 
     			(yyline+1) + " " + (yycolumn+1) + " " + yychar);
     }
+    
+    private long parseLong(int start, int end, int radix) {
+    	long result = 0;
+    	long digit;
+
+    	for (int i = start; i < end; i++) {
+      		digit  = Character.digit(yycharat(i),radix);
+      		result*= radix;
+      		result+= digit;
+    	}
+    	return result;
+    }
 %}
 
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 Number     = [0-9]+
+
+DecIntegerLiteral = 0 | [1-9][0-9]*
+DecLongLiteral    = {DecIntegerLiteral} [lL]
+
+HexIntegerLiteral = 0 [xX] 0* {HexDigit} {1,8}
+HexLongLiteral    = 0 [xX] 0* {HexDigit} {1,16} [lL]
+HexDigit          = [0-9a-fA-F]
+
+OctIntegerLiteral = 0+ [1-3]? {OctDigit} {1,15}
+OctLongLiteral    = 0+ 1? {OctDigit} {1,21} [lL]
+OctDigit          = [0-7]
+       
+FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}? [fF]
+
+FLit1    = [0-9]+ \. [0-9]* 
+FLit2    = \. [0-9]+ 
+FLit3    = [0-9]+ 
+Exponent = [eE] [+-]? [0-9]+
+
+/* string and character literals */
+StringCharacter = [^\r\n\"\\]
+SingleCharacter = [^\r\n\'\\]
+
+%state STRING, CHARLITERAL
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
@@ -80,6 +116,13 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 <YYINITIAL> {
 
   {Whitespace} {                              }
+  {DecIntegerLiteral}            { return symbolFactory.newSymbol("INTEGER_LITERAL", INTEGER_LITERAL, new Integer(yytext())); }
+  {DecLongLiteral}               { return symbolFactory.newSymbol("INTEGER_LITERAL_LONG", INTEGER_LITERAL_LONG, new Long(yytext().substring(0,yylength()-1))); }
+  {HexIntegerLiteral}            { return symbolFactory.newSymbol("HEX_LITERAL", HEX_LITERAL, new Integer((int) parseLong(2, yylength(), 16))); }
+  {HexLongLiteral}               { return symbolFactory.newSymbol("HEX_LITERAL_LONG", HEX_LITERAL_LONG, new Long(parseLong(2, yylength()-1, 16))); }
+  {OctIntegerLiteral}            { return symbolFactory.newSymbol("OCT_LITERAL", OCT_LITERAL, new Integer((int) parseLong(0, yylength(), 8))); }  
+  {OctLongLiteral}               { return symbolFactory.newSymbol("OCT_LITERAL_LONG", OCT_LITERAL_LONG, new Long(parseLong(0, yylength()-1, 8))); }
+  {FloatLiteral}                 { return symbolFactory.newSymbol("FLOAT_LITERAL", FLOAT_LITERAL, new Float(yytext().substring(0,yylength()-1))); }
   "<<"         { return symbolFactory.newSymbol("LSHIFT", LSHIFT); }
   ">>"         { return symbolFactory.newSymbol("RSHIFT", RSHIFT); }
   ">>="        { return symbolFactory.newSymbol("RSHIFTEQ", RSHIFTEQ); }
@@ -153,7 +196,47 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
 
+/* string literal */
+  \"                             { yybegin(STRING); string.setLength(0); }
 
+  /* character literal */
+  \'                             { yybegin(CHARLITERAL); }
+  
+<STRING> {
+  \"                             { yybegin(YYINITIAL); return symbolFactory.newSymbol("STRING_LITERAL", STRING_LITERAL, string.toString()); }
+  
+  {StringCharacter}+             { string.append( yytext() ); }
+  
+  /* escape sequences */
+  "\\b"                          { string.append( '\b' ); }
+  "\\t"                          { string.append( '\t' ); }
+  "\\n"                          { string.append( '\n' ); }
+  "\\f"                          { string.append( '\f' ); }
+  "\\r"                          { string.append( '\r' ); }
+  "\\\""                         { string.append( '\"' ); }
+  "\\'"                          { string.append( '\'' ); }
+  "\\\\"                         { string.append( '\\' ); }
+  \\[0-3]?{OctDigit}?{OctDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),8);
+                        				   string.append( val ); }
+}
+
+<CHARLITERAL> {
+  {SingleCharacter}\'            { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character(yytext().charAt(0))); }
+  
+  /* escape sequences */
+  "\\b"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\b'));}
+  "\\t"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\t'));}
+  "\\n"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\n'));}
+  "\\f"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\f'));}
+  "\\r"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\r'));}
+  "\\\""\'                       { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\"'));}
+  "\\'"\'                        { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\''));}
+  "\\\\"\'                       { yybegin(YYINITIAL); return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character('\\')); }
+  \\[0-3]?{OctDigit}?{OctDigit}\' { yybegin(YYINITIAL); 
+			                              int val = Integer.parseInt(yytext().substring(1,yylength()-1),8);
+			                            return symbolFactory.newSymbol("CHARACTER_LITERAL", CHARACTER_LITERAL, new Character((char)val)); }
+
+}
 
 // error fallback
 
