@@ -80,10 +80,17 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 <YYINITIAL> {
 
   {Whitespace} {                              }
+  "<<"         { return symbolFactory.newSymbol("LSHIFT", LSHIFT); }
+  ">>"         { return symbolFactory.newSymbol("RSHIFT", RSHIFT); }
+  ">>="        { return symbolFactory.newSymbol("RSHIFTEQ", RSHIFTEQ); }
+  ">>>"        { return symbolFactory.newSymbol("SSHIFT", SSHIFT); }
+  "~"          { return symbolFactory.newSymbol("COMP", COMP); }
   ";"          { return symbolFactory.newSymbol("SEMI", SEMI); }
   "."          { return symbolFactory.newSymbol("POINT", POINT); }
   "*"          { return symbolFactory.newSymbol("MULT", MULT); }
   ","          { return symbolFactory.newSymbol("COMMA", COMMA); }
+  "("          { return symbolFactory.newSymbol("LPAREN", LPAREN); }
+  ")"          { return symbolFactory.newSymbol("RPAREN", RPAREN); }
   "{"          { return symbolFactory.newSymbol("LBRACE", LBRACE); }
   "}"          { return symbolFactory.newSymbol("RBRACE", RBRACE); }
   "["          { return symbolFactory.newSymbol("LBRACK", LBRACK); }
@@ -115,6 +122,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "||="        { return symbolFactory.newSymbol("OROREQ", OROREQ); }
   "^"          { return symbolFactory.newSymbol("XOR", XOR); }
   "^="         { return symbolFactory.newSymbol("XOREQ", XOREQ); }
+  "new"        { return symbolFactory.newSymbol("NEW", NEW); }
   "package"    { return symbolFactory.newSymbol("PACKAGE", PACKAGE); }
   "import"     { return symbolFactory.newSymbol("IMPORT", IMPORT); }
   "class"      { return symbolFactory.newSymbol("CLASS", CLASS); }

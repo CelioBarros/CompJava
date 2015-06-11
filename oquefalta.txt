@@ -1,10 +1,6 @@
-arglist
-bit_expression
-casting_expression
 character
 class_declaration
 constructor_declaration
-creating_expression
 decimal_digits
 doc_comment
 do_statement
@@ -25,7 +21,6 @@ statement
 statement_block
 static_initializer
 string
-string_expression
 switch_statement
 try_statement
 type_declaration
