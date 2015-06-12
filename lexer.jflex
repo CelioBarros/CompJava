@@ -190,6 +190,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "long"       { return symbolFactory.newSymbol("LONG", LONG); } 
   "true"       { return symbolFactory.newSymbol("TRUE", TRUE); }
   "false"      { return symbolFactory.newSymbol("FALSE", FALSE); }
+  "null"       { return symbolFactory.newSymbol("NULL", NULL); }
+  "super"      { return symbolFactory.newSymbol("SUPER", SUPER); }
+  "this"       { return symbolFactory.newSymbol("THIS", THIS); }
+  "instanceof" { return symbolFactory.newSymbol("INSTANCEOF", INSTANCEOF); }
   "ampersand"  { return symbolFactory.newSymbol("AMPERSAND", AMPERSAND); }
   "ampersand=" { return symbolFactory.newSymbol("AMPERSANDEQ", AMPERSANDEQ); }
   {Comment}    { /* ignore */ }

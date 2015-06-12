@@ -9,7 +9,7 @@ package cup.example;
 public interface sym {
   /* terminals */
   public static final int SHORT = 65;
-  public static final int IDENTIFIER = 79;
+  public static final int IDENTIFIER = 83;
   public static final int GT = 38;
   public static final int IMPLEMENTS = 10;
   public static final int SSHIFT = 47;
@@ -42,6 +42,7 @@ public interface sym {
   public static final int MOD = 26;
   public static final int AMPERSANDEQ = 57;
   public static final int CLASS = 8;
+  public static final int SUPER = 80;
   public static final int ABSTRACT = 15;
   public static final int TRUE = 52;
   public static final int NATIVE = 17;
@@ -59,10 +60,12 @@ public interface sym {
   public static final int GTEQ = 40;
   public static final int AMPERSAND = 56;
   public static final int INT = 66;
-  public static final int STRING_LITERAL = 81;
+  public static final int STRING_LITERAL = 85;
   public static final int OCT_LITERAL = 76;
+  public static final int NULL = 79;
   public static final int EQEQ = 42;
   public static final int EOF = 0;
+  public static final int THIS = 81;
   public static final int MULTEQ = 35;
   public static final int IMPORT = 6;
   public static final int OROREQ = 61;
@@ -73,11 +76,12 @@ public interface sym {
   public static final int error = 1;
   public static final int SYNCHRONIZED = 18;
   public static final int DIVEQ = 37;
+  public static final int INSTANCEOF = 82;
   public static final int MODEQ = 27;
   public static final int MINUSMINUS = 30;
   public static final int COLON = 55;
   public static final int HEX_LITERAL = 74;
-  public static final int CHARACTER_LITERAL = 80;
+  public static final int CHARACTER_LITERAL = 84;
   public static final int VOLATILE = 20;
   public static final int OREQ = 60;
   public static final int PLUSPLUS = 32;
@@ -170,6 +174,10 @@ public interface sym {
   "OCT_LITERAL",
   "OCT_LITERAL_LONG",
   "FLOAT_LITERAL",
+  "NULL",
+  "SUPER",
+  "THIS",
+  "INSTANCEOF",
   "IDENTIFIER",
   "CHARACTER_LITERAL",
   "STRING_LITERAL"
