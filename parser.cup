@@ -70,6 +70,10 @@ precedence left PLUS, MINUS;
 precedence left MULT, DIV;
 precedence left MOD;
 precedence left NOT; 
+precedence left LPAREN;
+precedence left POINT;
+precedence left COMMA;
+precedence left INSTANCEOF;
 precedence right PLUSEQ, MINUSEQ;
 precedence right MULTEQ, DIVEQ;
 precedence right MODEQ;
@@ -269,14 +273,12 @@ expression ::= numeric_expression
 	| THIS
     | IDENTIFIER 
     | num_logic_expression
-    /*  | ( "(" expression ")" ) 
-      | ( expression 
-      ( ( "(" [ arglist ] ")" ) 
-      | ( "[" expression "]" ) 
-      | ( "." expression ) 
-      | ( "," expression ) 
-      | ( "instanceof" ( class_name | interface_name ) ) 
-      ) )*/
+    | expression LPAREN RPAREN
+    | expression LPAREN arglist RPAREN
+    | expression LBRACK expression RBRACK
+    | expression POINT expression
+    | expression COMMA expression
+    | expression INSTANCEOF name
     ;
     
 num_logic_expression ::= expression MODEQ expression 

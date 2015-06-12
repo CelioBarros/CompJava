@@ -4,7 +4,6 @@ decimal_digits
 doc_comment
 do_statement
 exponent_part
-expression
 field_declaration
 float_type_suffix
 for_statement
