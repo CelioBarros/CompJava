@@ -63,7 +63,7 @@ non terminal			expression, numeric_expression, num_const, brack_list_opt, brack_
 non terminal			testing_expression, test_const, logical_expression, logical_const;
 non terminal			string_expression, bit_expression, bit_const, casting_expression;
 non terminal			creating_expression, creating_expression_alt, arglist, array_expression_opt;
-non terminal			literal_expression, integer_literal_desc, string;
+non terminal			literal_expression, integer_literal_desc, string, num_logic_expression;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -268,6 +268,7 @@ expression ::= numeric_expression
 	| SUPER
 	| THIS
     | IDENTIFIER 
+    | num_logic_expression
     /*  | ( "(" expression ")" ) 
       | ( expression 
       ( ( "(" [ arglist ] ")" ) 
@@ -277,6 +278,10 @@ expression ::= numeric_expression
       | ( "instanceof" ( class_name | interface_name ) ) 
       ) )*/
     ;
+    
+num_logic_expression ::= expression MODEQ expression 
+	| expression MOD expression
+	;     
       
 numeric_expression ::= MINUS expression 
       | PLUSPLUS expression
@@ -294,8 +299,6 @@ num_const ::= PLUS
       | MULTEQ
       | DIV
       | DIVEQ
-      | MOD
-      | MODEQ
       ;
       
 testing_expression ::= expression test_const expression
@@ -310,7 +313,7 @@ test_const ::= GT
 	;
 	
 logical_expression ::= NOT expression 
-      | logical_expression logical_const expression
+      | expression logical_const expression
       | expression QUESTION expression COLON expression 
       | TRUE
       | FALSE 
@@ -324,16 +327,14 @@ logical_const ::= AMPERSAND
       | XOREQ 
       | AMPERSAND AMPERSAND 
       | OROREQ
-      | MOD
-      | MODEQ
       ;
       
-string_expression ::= string_expression PLUS expression
-	| string_expression PLUSEQ expression
+string_expression ::= expression PLUS expression
+	| expression PLUSEQ expression
 	;
 	
 bit_expression ::= COMP expression
-	| bit_expression bit_const expression
+	| expression bit_const expression
 	;
 	
 bit_const ::= SSHIFT
