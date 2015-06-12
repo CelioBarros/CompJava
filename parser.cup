@@ -34,6 +34,7 @@ terminal			PUBLIC, PROTECTED, PRIVATE, STATIC, ABSTRACT, FINAL, NATIVE, SYNCHRON
 terminal			TRANSIENT, VOLATILE, LBRACE, RBRACE, LBRACK, RBRACK, EQ, MOD, MODEQ, NOT;
 terminal			MINUS, MINUSMINUS, PLUS, PLUSPLUS, PLUSEQ, MINUSEQ, MULTEQ, DIV, DIVEQ;
 terminal			GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
+terminal			RETURN, THROW, BREAK, CONTINUE;
 terminal			COMP, RSHIFTEQ, RSHIFT, SSHIFT, LSHIFT, LPAREN, RPAREN, NEW;
 terminal			TRUE, FALSE, QUESTION, COLON, AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ;
 terminal			BOOLEAN, BYTE, CHAR, SHORT, INT, FLOAT, LONG, DOUBLE, XOREQ, XOR;
@@ -57,8 +58,8 @@ non terminal			static_initializer;
 non terminal			statement_block, statements_opt, statements, statement;
 non terminal			variable_declaration, variable_declarator, variable_initializer_opt;
 non terminal			variable_initializer, variable_initializers, array_initializer;
-non terminal			type, type_specifier;
-non terminal			bracks_opt, bracks, brack;
+non terminal			type, type_specifier, variable_declarators;
+non terminal			bracks_opt, bracks, brack, return_opt, break_opt, continue_opt;
 non terminal			expression, numeric_expression, num_const, brack_list_opt, brack_list;
 non terminal			testing_expression, test_const, logical_expression, logical_const;
 non terminal			string_expression, bit_expression, bit_const, casting_expression;
@@ -74,6 +75,7 @@ precedence left LPAREN;
 precedence left POINT;
 precedence left COMMA;
 precedence left INSTANCEOF;
+precedence left SEMI;
 precedence right PLUSEQ, MINUSEQ;
 precedence right MULTEQ, DIVEQ;
 precedence right MODEQ;
@@ -85,8 +87,7 @@ precedence left GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ, QUESTION;
 precedence right AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ, XOR, XOREQ;
 
 /* The grammar rules */
-inicio ::= inicio compilation_unit SEMI
-            | compilation_unit SEMI
+inicio ::= compilation_unit
             ;
             
 compilation_unit ::= package_statement_opt import_statement_opt type_declarations_opt
@@ -195,24 +196,33 @@ statements ::= statement
 	;
 	
 statement ::= variable_declaration
-/*      | ( expression ";" ) 
-      | ( statement_block ) 
-      | ( if_statement ) 
+//	  | expression SEMI
+      | statement_block 
+    /*  | ( if_statement ) 
       | ( do_statement ) 
       | ( while_statement ) 
       | ( for_statement ) 
       | ( try_statement ) 
-      | ( switch_statement ) 
-      | ( "synchronized" "(" expression ")" statement ) 
-      | ( "return" [ expression ] ";" ) 
-      | ( "throw" expression ";" ) 
-      | ( identifier ":" statement ) 
-      | ( "break" [ identifier ] ";" ) 
-      | ( "continue" [ identifier ] ";" ) 
-      | ( ";" )  */
+      | ( switch_statement )*/ 
+      | SYNCHRONIZED LPAREN expression RPAREN statement
+      | return_opt 
+      | THROW expression SEMI
+//      | IDENTIFIER COLON statement 
+//      | break_opt 
+//      | continue_opt 
+      | SEMI
 	;	
 
-variable_declaration ::= modifiers_opt type variable_declarator // terminar
+return_opt ::= RETURN SEMI
+	| RETURN expression SEMI
+	;
+break_opt ::= SEMI
+	| IDENTIFIER SEMI
+	;
+continue_opt ::= SEMI
+	| IDENTIFIER SEMI
+	;
+variable_declaration ::= modifiers_opt type variable_declarators SEMI
 	;
 
 type ::= type_specifier bracks_opt
@@ -238,6 +248,10 @@ bracks ::= brack
 	;
 	
 brack ::= LBRACK RBRACK
+	;
+	
+variable_declarators ::= variable_declarator
+	| variable_declarators COMMA variable_declarator
 	;
 	
 variable_declarator ::= IDENTIFIER bracks_opt variable_initializer_opt

@@ -1,5 +1,3 @@
-package aas; import funciona;;
-package aas;;
-package aas.ramon.viado;;
-import funciona;;
-import teste;;
+package aas;
+import funciona;
+import teste;

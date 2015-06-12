@@ -18,7 +18,4 @@ static_initializer
 switch_statement
 try_statement
 type_declaration
-variable_declaration
-variable_declarator
-variable_initializer
 while_statement

@@ -196,6 +196,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "instanceof" { return symbolFactory.newSymbol("INSTANCEOF", INSTANCEOF); }
   "ampersand"  { return symbolFactory.newSymbol("AMPERSAND", AMPERSAND); }
   "ampersand=" { return symbolFactory.newSymbol("AMPERSANDEQ", AMPERSANDEQ); }
+  "return" 	   { return symbolFactory.newSymbol("RETURN", RETURN); }
+  "throw" 	   { return symbolFactory.newSymbol("THROW", THROW); }
+  "break" 	   { return symbolFactory.newSymbol("BREAK", BREAK); }
+  "continue"   { return symbolFactory.newSymbol("CONTINUE", CONTINUE); }
   {Comment}    { /* ignore */ }
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
