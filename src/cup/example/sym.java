@@ -9,7 +9,7 @@ package cup.example;
 public interface sym {
   /* terminals */
   public static final int SHORT = 69;
-  public static final int IDENTIFIER = 87;
+  public static final int IDENTIFIER = 99;
   public static final int GT = 38;
   public static final int IMPLEMENTS = 10;
   public static final int SSHIFT = 51;
@@ -17,6 +17,7 @@ public interface sym {
   public static final int PLUSEQ = 33;
   public static final int SEMI = 2;
   public static final int RBRACK = 24;
+  public static final int CATCH = 93;
   public static final int COMMA = 5;
   public static final int RBRACE = 22;
   public static final int THROW = 45;
@@ -50,25 +51,33 @@ public interface sym {
   public static final int LONG = 72;
   public static final int PLUS = 31;
   public static final int QUESTION = 58;
+  public static final int WHILE = 90;
   public static final int EXTENDS = 9;
+  public static final int INTERFACE = 98;
   public static final int CHAR = 68;
   public static final int BOOLEAN = 66;
+  public static final int SWITCH = 95;
+  public static final int FOR = 91;
+  public static final int DO = 89;
   public static final int RSHIFTEQ = 49;
   public static final int DIV = 36;
   public static final int PUBLIC = 11;
   public static final int RETURN = 44;
   public static final int MULT = 7;
+  public static final int TRY = 92;
+  public static final int ELSE = 88;
   public static final int POINT = 4;
   public static final int BREAK = 46;
   public static final int GTEQ = 40;
   public static final int AMPERSAND = 60;
   public static final int INT = 70;
-  public static final int STRING_LITERAL = 89;
+  public static final int STRING_LITERAL = 101;
   public static final int OCT_LITERAL = 80;
   public static final int NULL = 83;
   public static final int EQEQ = 42;
   public static final int EOF = 0;
   public static final int THIS = 85;
+  public static final int DEFAULT = 97;
   public static final int MULTEQ = 35;
   public static final int IMPORT = 6;
   public static final int OROREQ = 65;
@@ -79,15 +88,18 @@ public interface sym {
   public static final int error = 1;
   public static final int SYNCHRONIZED = 18;
   public static final int DIVEQ = 37;
+  public static final int FINALLY = 94;
   public static final int CONTINUE = 47;
+  public static final int IF = 87;
   public static final int INSTANCEOF = 86;
   public static final int MODEQ = 27;
   public static final int MINUSMINUS = 30;
   public static final int COLON = 59;
   public static final int HEX_LITERAL = 78;
-  public static final int CHARACTER_LITERAL = 88;
+  public static final int CHARACTER_LITERAL = 100;
   public static final int VOLATILE = 20;
   public static final int OREQ = 64;
+  public static final int CASE = 96;
   public static final int PLUSPLUS = 32;
   public static final int HEX_LITERAL_LONG = 79;
   public static final int NEW = 55;
@@ -186,6 +198,18 @@ public interface sym {
   "SUPER",
   "THIS",
   "INSTANCEOF",
+  "IF",
+  "ELSE",
+  "DO",
+  "WHILE",
+  "FOR",
+  "TRY",
+  "CATCH",
+  "FINALLY",
+  "SWITCH",
+  "CASE",
+  "DEFAULT",
+  "INTERFACE",
   "IDENTIFIER",
   "CHARACTER_LITERAL",
   "STRING_LITERAL"

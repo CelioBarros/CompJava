@@ -1,3 +1,11 @@
-package aas;
-import funciona;
-import teste;
+package cup.example;
+
+import java_cup.runtime.*;
+
+class Driver {
+
+	public static void main(String[] args) {
+	  final public static int YYEOF = -1;
+	}
+	
+}

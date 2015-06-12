@@ -9,6 +9,35 @@ import java.io.FileInputStream;
 parser code {:
   protected Lexer lexer;
   
+public void report_error(String message, Object info) {
+   StringBuffer m = new StringBuffer("Erro encontrado na ");
+
+String token = "";
+
+if (info instanceof java_cup.runtime.Symbol) {
+           java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+           token = s.value+"";
+
+           if (s.left+1 >= 0) {
+               /* Add to the end of the StringBuffer error message
+                  the line number of the error in the input. */
+               m.append("linha "+(s.left));   
+               /* Check if the column number in the input is greater
+                  or equal to zero. */
+               if (s.right >= 0)                    
+                   /* Add to the end of the StringBuffer error message
+                      the column number of the error in the input. */
+                   m.append(", coluna "+(s.right));
+           }
+       }
+       m.append(" : "+message);
+       System.err.println(m);
+ }
+  
+ public void report_fatal_error(String message, Object info) {
+   report_error(message, info);
+   throw new RuntimeException("Erro fatal.");
+ }
 
  
 :}
@@ -40,7 +69,8 @@ terminal			TRUE, FALSE, QUESTION, COLON, AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ,
 terminal			BOOLEAN, BYTE, CHAR, SHORT, INT, FLOAT, LONG, DOUBLE, XOREQ, XOR;
 terminal			INTEGER_LITERAL, INTEGER_LITERAL_LONG, HEX_LITERAL, HEX_LITERAL_LONG;
 terminal			OCT_LITERAL, OCT_LITERAL_LONG, FLOAT_LITERAL;
-terminal			NULL, SUPER, THIS, INSTANCEOF;
+terminal			NULL, SUPER, THIS, INSTANCEOF, IF, ELSE, DO, WHILE, FOR, TRY, CATCH, FINALLY;
+terminal			SWITCH, CASE, DEFAULT, INTERFACE;
 terminal String     IDENTIFIER;
 terminal Character	CHARACTER_LITERAL;
 terminal String 	STRING_LITERAL;
@@ -60,11 +90,16 @@ non terminal			variable_declaration, variable_declarator, variable_initializer_o
 non terminal			variable_initializer, variable_initializers, array_initializer;
 non terminal			type, type_specifier, variable_declarators;
 non terminal			bracks_opt, bracks, brack, return_opt, break_opt, continue_opt;
-non terminal			expression, numeric_expression, num_const, brack_list_opt, brack_list;
+non terminal			expression, numeric_expression, num_const;
 non terminal			testing_expression, test_const, logical_expression, logical_const;
 non terminal			string_expression, bit_expression, bit_const, casting_expression;
 non terminal			creating_expression, creating_expression_alt, arglist, array_expression_opt;
 non terminal			literal_expression, integer_literal_desc, string, num_logic_expression;
+non terminal			if_statement, else_opt, do_statement, while_statement, parameter, switch_statement;
+non terminal			for_statement, for_var_exp, expression_opt, try_statement, statements_try, try_opt;
+non terminal			statements_switch_opt, statements_switch, statement_switch;
+non terminal			mcv_declarations, parameter_list, statement_aux, method_declaration;
+non terminal			constructor_declaration, parameter_list_opt, interface_declaration, inter_opt;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -72,10 +107,12 @@ precedence left MULT, DIV;
 precedence left MOD;
 precedence left NOT; 
 precedence left LPAREN;
+precedence left ELSE;
 precedence left POINT;
 precedence left COMMA;
 precedence left INSTANCEOF;
-precedence left SEMI;
+precedence left TRY, CATCH, FINALLY;
+precedence right SEMI;
 precedence right PLUSEQ, MINUSEQ;
 precedence right MULTEQ, DIVEQ;
 precedence right MODEQ;
@@ -83,6 +120,7 @@ precedence right PLUSPLUS, MINUSMINUS;
 precedence left SSHIFT, RSHIFT, LSHIFT, RSHIFTEQ;
 precedence left LBRACK;
 precedence left GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ, QUESTION;
+precedence left IDENTIFIER;
 
 precedence right AMPERSAND, AMPERSANDEQ, OR, OROR, OREQ, OROREQ, XOR, XOREQ;
 
@@ -125,7 +163,7 @@ type_declarations ::= type_declaration
 					;
 					
 type_declaration ::= class_declaration
-					//| CLASS name IMPORT // interface_declaration
+					| interface_declaration
 					;
 
 class_declaration ::= modifiers_opt CLASS IDENTIFIER super_opt interfaces_opt field_aux
@@ -177,7 +215,7 @@ field_declarations ::= field_declaration
 	| field_declarations field_declaration
 	;
 	
-field_declaration ::= name // declarar corretamente
+field_declaration ::= mcv_declarations
 	| static_initializer
 	| SEMI
 	;
@@ -196,31 +234,31 @@ statements ::= statement
 	;
 	
 statement ::= variable_declaration
-//	  | expression SEMI
+	  | expression SEMI
       | statement_block 
-    /*  | ( if_statement ) 
-      | ( do_statement ) 
-      | ( while_statement ) 
-      | ( for_statement ) 
-      | ( try_statement ) 
-      | ( switch_statement )*/ 
+      | if_statement 
+      | do_statement 
+      | while_statement 
+      | for_statement 
+      | try_statement 
+      | switch_statement 
       | SYNCHRONIZED LPAREN expression RPAREN statement
       | return_opt 
       | THROW expression SEMI
-//      | IDENTIFIER COLON statement 
-//      | break_opt 
-//      | continue_opt 
+      | IDENTIFIER COLON statement 
+      | break_opt 
+      | continue_opt 
       | SEMI
 	;	
 
 return_opt ::= RETURN SEMI
 	| RETURN expression SEMI
 	;
-break_opt ::= SEMI
-	| IDENTIFIER SEMI
+break_opt ::= BREAK SEMI
+	| BREAK IDENTIFIER SEMI
 	;
-continue_opt ::= SEMI
-	| IDENTIFIER SEMI
+continue_opt ::= CONTINUE SEMI
+	| CONTINUE IDENTIFIER SEMI
 	;
 variable_declaration ::= modifiers_opt type variable_declarators SEMI
 	;
@@ -366,7 +404,7 @@ creating_expression ::= NEW creating_expression_alt
 	;
 	
 creating_expression_alt ::= name LPAREN arglist RPAREN
-	| type_specifier array_expression_opt brack_list_opt
+	| type_specifier array_expression_opt bracks_opt
 	| LPAREN expression RPAREN
 	;
 	
@@ -377,14 +415,7 @@ arglist ::= expression
 array_expression_opt ::= LBRACK expression RBRACK
 	|
 	;
-
-brack_list_opt ::= brack_list
-	| 
-	;
 	
-brack_list ::= LBRACK RBRACK
-	| brack_list LBRACK RBRACK
-	;
 
 literal_expression ::= integer_literal_desc 
     | FLOAT_LITERAL
@@ -400,3 +431,88 @@ integer_literal_desc ::= INTEGER_LITERAL
 	| OCT_LITERAL_LONG
 	;
 
+if_statement ::= IF LPAREN expression RPAREN statement else_opt
+	;
+	
+else_opt ::= ELSE statement
+	|
+	;
+	
+do_statement ::= DO statement WHILE LPAREN expression RPAREN SEMI
+	;
+	
+while_statement ::= WHILE LPAREN expression RPAREN statement
+	;
+	
+for_statement ::= FOR LPAREN for_var_exp expression_opt SEMI expression_opt SEMI RPAREN statement
+	;
+	
+for_var_exp ::= variable_declaration
+	| expression SEMI
+	| SEMI
+	;
+	
+expression_opt ::= expression
+	|
+	;
+	
+try_statement ::= TRY statements_try try_opt
+	;
+	
+statements_try ::= statement
+	| statements_try CATCH LPAREN parameter RPAREN statement
+	;
+	
+try_opt ::= FINALLY statement
+	|
+	;
+	
+parameter ::= type IDENTIFIER bracks_opt
+	;
+
+switch_statement ::= SWITCH LPAREN expression RPAREN LBRACE statements_switch_opt RBRACE
+	;
+	
+statements_switch_opt ::= statements_switch
+	|
+	;
+	
+statements_switch ::= statement_switch
+	| statements_switch statement_switch
+	;
+	
+statement_switch ::= CASE expression COLON
+	| DEFAULT COLON
+	| statement
+	;
+	
+mcv_declarations ::= method_declaration
+	| constructor_declaration
+	| variable_declaration
+	;
+
+method_declaration ::= modifiers_opt type IDENTIFIER LPAREN parameter_list_opt RPAREN bracks_opt statement_aux
+	;
+	
+parameter_list_opt ::= parameter_list
+	|
+	;
+	
+parameter_list ::= parameter
+	| parameter_list COMMA parameter
+	;
+	
+statement_aux ::= statement_block
+	| SEMI
+	;
+	
+constructor_declaration ::= modifiers_opt IDENTIFIER LPAREN parameter_list_opt RPAREN statement_block
+	;
+	
+interface_declaration ::=  modifiers_opt INTERFACE IDENTIFIER inter_opt LBRACE field_declarations_opt RBRACE
+	;
+	
+inter_opt ::= EXTENDS interface_type_list
+	|
+	;
+	

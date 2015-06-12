@@ -200,6 +200,18 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "throw" 	   { return symbolFactory.newSymbol("THROW", THROW); }
   "break" 	   { return symbolFactory.newSymbol("BREAK", BREAK); }
   "continue"   { return symbolFactory.newSymbol("CONTINUE", CONTINUE); }
+  "if"         { return symbolFactory.newSymbol("IF", IF); }
+  "else"       { return symbolFactory.newSymbol("ELSE", ELSE); }
+  "do"         { return symbolFactory.newSymbol("DO", DO); }
+  "while"      { return symbolFactory.newSymbol("WHILE", WHILE); }
+  "for"        { return symbolFactory.newSymbol("FOR", FOR); }
+  "try"        { return symbolFactory.newSymbol("TRY", TRY); }
+  "catch"      { return symbolFactory.newSymbol("CATCH", CATCH); }
+  "finally"    { return symbolFactory.newSymbol("FINALLY", FINALLY); }
+  "switch"     { return symbolFactory.newSymbol("SWITCH", SWITCH); }
+  "case"       { return symbolFactory.newSymbol("CASE", CASE); }
+  "default"    { return symbolFactory.newSymbol("DEFAULT", DEFAULT); }
+  "interface"  { return symbolFactory.newSymbol("INTERFACE", INTERFACE); }
   {Comment}    { /* ignore */ }
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
 }
