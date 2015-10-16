@@ -10,33 +10,19 @@ parser code {:
   protected Lexer lexer;
   
 public void report_error(String message, Object info) {
-   StringBuffer m = new StringBuffer("Erro encontrado na ");
-
 String token = "";
 
 if (info instanceof java_cup.runtime.Symbol) {
            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
            token = s.value+"";
 
-           if (s.left+1 >= 0) {
-               /* Add to the end of the StringBuffer error message
-                  the line number of the error in the input. */
-               m.append("linha "+(s.left));   
-               /* Check if the column number in the input is greater
-                  or equal to zero. */
-               if (s.right >= 0)                    
-                   /* Add to the end of the StringBuffer error message
-                      the column number of the error in the input. */
-                   m.append(", coluna "+(s.right));
-           }
        }
-       m.append(" : "+message);
-       System.err.println(m);
+       System.err.println("Erro em: " + token);
  }
   
  public void report_fatal_error(String message, Object info) {
    report_error(message, info);
-   throw new RuntimeException("Erro fatal.");
+   throw new RuntimeException("Erro Sintático.");
  }
 
  
@@ -46,7 +32,7 @@ if (info instanceof java_cup.runtime.Symbol) {
 init with {:
   ComplexSymbolFactory f = new ComplexSymbolFactory();
   symbolFactory = f;
-  File file = new File("input.txt");
+  File file = new File(Driver.arquivo);
   FileInputStream fis = null;
   try {
     fis = new FileInputStream(file);
@@ -97,7 +83,7 @@ non terminal			creating_expression, creating_expression_alt, arglist, array_expr
 non terminal			literal_expression, integer_literal_desc, string, num_logic_expression;
 non terminal			if_statement, else_opt, do_statement, while_statement, parameter, switch_statement;
 non terminal			for_statement, for_var_exp, expression_opt, try_statement, statements_try, try_opt;
-non terminal			statements_switch_opt, statements_switch, statement_switch;
+non terminal			statements_switch_opt, statements_switch, statement_switch, arglist_opt;
 non terminal			mcv_declarations, parameter_list, statement_aux, method_declaration;
 non terminal			constructor_declaration, parameter_list_opt, interface_declaration, inter_opt;
 
@@ -403,9 +389,13 @@ casting_expression ::= LPAREN type RPAREN expression
 creating_expression ::= NEW creating_expression_alt
 	;
 	
-creating_expression_alt ::= name LPAREN arglist RPAREN
+creating_expression_alt ::= name LPAREN arglist_opt RPAREN
 	| type_specifier array_expression_opt bracks_opt
 	| LPAREN expression RPAREN
+	;
+	
+arglist_opt ::= arglist
+	|
 	;
 	
 arglist ::= expression

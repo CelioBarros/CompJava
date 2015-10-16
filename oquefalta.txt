@@ -1,6 +1,0 @@
-class_declaration
-decimal_digits
-exponent_part
-field_declaration
-float_type_suffix
-interface_declaration

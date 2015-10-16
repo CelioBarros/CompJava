@@ -261,7 +261,6 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 // error fallback
 
 /* error fallback */
-{Number}{ident} { throw new RuntimeException("Vari√°vel n√£o pode come√ßar com n√∫mero em \""+yytext()+
-                                                             "\" na linha "+yyline+", coluna "+yycolumn); }
-[^]|\n                             { throw new RuntimeException("Caractere inv√°lido \""+yytext()+
-                                                             "\" na linha "+yyline+", coluna "+yycolumn); }
+{Number}{ident} { throw new RuntimeException("Vari·veis n„o podem comeÁar com n˙meros, erro na vari·vel:\n"
+											+yytext()); }
+[^]|\n                             { throw new RuntimeException("Caractere inv·lido."); }
