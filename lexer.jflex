@@ -42,6 +42,12 @@ import java.io.InputStreamReader;
 						new Location(yyline+1, yycolumn +1, yychar), 
 						new Location(yyline+1,yycolumn+yylength(), yychar+yylength()), lexem);
     }
+      public String current_lexeme(){
+    int l = yyline+1;
+    int c = yycolumn+1;
+    return " (line: "+l+" , column: "+c+" , lexeme: '"+yytext()+"')";
+  }
+    
     
     protected void emit_warning(String message){
     	System.out.println("scanner warning: " + message + " at : 2 "+ 

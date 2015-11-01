@@ -105,12 +105,19 @@ public interface sym {
   public static final int LSHIFT = 52;
   public static final int XOR = 75;
   public static final int MINUSEQ = 34;
+  public static final int MINUSEQ = 34;
   }
 
 class Driver {
 
-	public static void main(String[] args) {
-	public static final int MINUSEQ = 34;
+	public boolean leo(){
+		System.out.println(72+72);
+		return true;
 	}
-	public static final int MINUSEQ = 34;
+	public int MINUSEQ = 34;
+	
+	public int leoasdasd(){
+		System.out.println(72+72);
+		return 1;
+	}
 }
