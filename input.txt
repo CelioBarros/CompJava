@@ -113,18 +113,35 @@ public interface sym {
 class Driver {
 
 	public boolean metodo1(){
-		System.out.println(72+72);
 		return true;
 	}
-	public int MINUSEQ = 2;
 	
-	public int metodo2(){
-		System.out.println(72+72);
-		return 2;
+	public boolean metodo2(){
+		int MINUSEQ = 2;
+		return 3>2;
 	}
+	
+	public void teste123(){}
 	
 	public character metodo3(){
 		System.out.println(72+72);
 		return 'a';
 	}
+	
+	public String metodo3(){
+		return "teste";
+	}
+	
+	public int metodo4(){
+		for (int i = 0; true; i++;) {}
+		return 23;		
+	}
+}
+
+
+class Classe2 extends Driver{
+
+	public static void teste(Driver drive){
+	}
+		
 }
