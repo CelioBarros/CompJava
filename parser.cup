@@ -94,8 +94,8 @@ terminal			INTEGER_LITERAL_LONG, HEX_LITERAL, HEX_LITERAL_LONG;
 terminal			OCT_LITERAL, OCT_LITERAL_LONG, FLOAT_LITERAL;
 terminal			NULL, SUPER, THIS, INSTANCEOF, IF, ELSE, DO, WHILE, FOR, TRY, CATCH, FINALLY;
 terminal			SWITCH, CASE, DEFAULT, INTERFACE;
-terminal String     IDENTIFIER;
-terminal Character	CHARACTER_LITERAL;
+terminal java.lang.String     IDENTIFIER;
+terminal java.lang.Character	CHARACTER_LITERAL;
 terminal java.lang.String 	STRING_LITERAL;
 terminal java.lang.Number INTEGER_LITERAL;
 terminal java.lang.Boolean BOOLEAN;
@@ -328,7 +328,16 @@ break_opt ::= BREAK SEMI
 continue_opt ::= CONTINUE SEMI
 	| CONTINUE IDENTIFIER SEMI
 	;
-variable_declaration ::= modifiers_opt type variable_declarators SEMI
+	
+variable_declaration ::= modifiers_opt type:t1 variable_declarators:t2 SEMI {:
+System.out.println((Type)t1);
+System.out.println((Type)t2);
+		if(!((Type)t1).equals((Type)t2)){
+			System.err.println("Erro semantico");
+			System.exit(1);
+
+		}
+:}
 	;
 
 type ::= type_specifier:t bracks_opt
@@ -337,10 +346,10 @@ type ::= type_specifier:t bracks_opt
 	
 type_specifier ::= BOOLEAN {: RESULT = Type.bool(); :}
 	| BYTE
-	| CHAR
+	| CHAR {: RESULT = Type.character(); :}
 	| SHORT
 	| INT {: RESULT = Type.integer(); :}
-	| FLOAT
+	| FLOAT {: RESULT = Type.floating(); :}
 	| LONG
 	| DOUBLE
 	| name:sn
@@ -361,19 +370,22 @@ bracks ::= brack
 brack ::= LBRACK RBRACK
 	;
 	
-variable_declarators ::= variable_declarator
-	| variable_declarators COMMA variable_declarator
+variable_declarators ::= variable_declarator:t
+	{: RESULT = (Type)t; :}
+	| variable_declarators COMMA variable_declarator:t
+	{: RESULT = (Type)t; :}
 	;
 	
 variable_declarator ::=
-		IDENTIFIER bracks_opt variable_initializer_opt
+		IDENTIFIER bracks_opt variable_initializer_opt:t
+		{: RESULT = (Type)t; :}
 	;
 
-variable_initializer_opt ::= EQ variable_initializer
-	|
+variable_initializer_opt ::= EQ variable_initializer:t {: RESULT = (Type)t; :}
+	| {: RESULT = Type.voidtype(); :}
 	;
 
-variable_initializer ::= expression
+variable_initializer ::= expression:t {: RESULT = (Type)t; :}
 	| array_initializer
 	;
 	
@@ -502,7 +514,10 @@ literal_expression ::= integer_literal_desc {: RESULT = Type.integer();:}
 			   if(s == null) RESULT = Type.reference(Type.forwardName("String", parser.lexer.current_lexeme())); 
 			   else RESULT = Type.reference(s.getType());
 			:}
-    | CHARACTER_LITERAL {: RESULT = Type.character();:}
+    | CHARACTER_LITERAL    {: Symb s = Env.get("character", Env.getRoot()); 
+			   if(s == null) RESULT = Type.reference(Type.forwardName("character", parser.lexer.current_lexeme())); 
+			   else RESULT = Type.reference(s.getType());
+			:}
     ;
      
 
@@ -576,8 +591,10 @@ mcv_declarations ::= method_declaration
 	;
 	
 method_declaration ::= method_header:t1 method_body:t2 {:
+		System.out.println((Type)t1);
+		System.out.println((Type)t2);
 		if(!((Type)t1).equals((Type)t2)){
-			System.out.println("Erro semantico");
+			System.err.println("Erro semantico");
 			System.exit(1);
 
 		}

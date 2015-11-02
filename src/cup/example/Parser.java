@@ -2163,7 +2163,7 @@ class CUP$Parser$actions {
               Sname RESULT =null;
 		Location nxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location nxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
-		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		java.lang.String n = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		//@@CUPDBG4
  if(parser.first) RESULT = new Sname(n, Env.get(n), Env.get(n, Env.getRoot())); 
 			   if(parser.second) RESULT = new Sname(n, Env.get(n), Env.get(n, Env.getRoot()));
@@ -2181,7 +2181,7 @@ class CUP$Parser$actions {
 		Sname sn = (Sname)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		Location nxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location nxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
-		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		java.lang.String n = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		//@@CUPDBG5
  Symb s1 = sn.cs;
 			   if(s1 == null) { parser.sem_error(sn.name, "UNKNOWN NAME");
@@ -2328,7 +2328,7 @@ class CUP$Parser$actions {
 		Boolean m = (Boolean)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		Location n1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location n1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
-		String n1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		java.lang.String n1 = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 //@@CUPDBG6
  System.out.println("CLASS ENTRY: "+n1);
 			   if(parser.first) if (Env.putClass(n1, m.booleanValue()) != 0) parser.sem_error(n1,"DUPLICATE CLASS NAME");
@@ -2352,7 +2352,7 @@ class CUP$Parser$actions {
 		Boolean m = (Boolean)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-6)).value;
 		Location n1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).xleft;
 		Location n1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).xright;
-		String n1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		java.lang.String n1 = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("class_declaration",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -2937,6 +2937,21 @@ RESULT = (Type)t;
           case 82: // variable_declaration ::= modifiers_opt type variable_declarators SEMI 
             {
               Object RESULT =null;
+		Location t1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).xleft;
+		Location t1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).xright;
+		Type t1 = (Type)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xleft;
+		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xright;
+		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		//@@CUPDBG17
+
+System.out.println((Type)t1);
+System.out.println((Type)t2);
+		if(!((Type)t1).equals((Type)t2)){
+			System.err.println("Erro semantico");
+			System.exit(1);
+
+		}
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_declaration",27, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -2949,7 +2964,7 @@ RESULT = (Type)t;
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		//@@CUPDBG17
+		//@@CUPDBG18
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type",86, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -2959,7 +2974,7 @@ RESULT = (Type)t;
           case 84: // type_specifier ::= BOOLEAN 
             {
               Object RESULT =null;
-		//@@CUPDBG18
+		//@@CUPDBG19
  RESULT = Type.bool(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_specifier",33, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -2978,7 +2993,8 @@ RESULT = (Type)t;
           case 86: // type_specifier ::= CHAR 
             {
               Object RESULT =null;
-
+		//@@CUPDBG20
+ RESULT = Type.character(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_specifier",33, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -2996,7 +3012,7 @@ RESULT = (Type)t;
           case 88: // type_specifier ::= INT 
             {
               Object RESULT =null;
-		//@@CUPDBG19
+		//@@CUPDBG21
  RESULT = Type.integer(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_specifier",33, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3006,7 +3022,8 @@ RESULT = (Type)t;
           case 89: // type_specifier ::= FLOAT 
             {
               Object RESULT =null;
-
+		//@@CUPDBG22
+ RESULT = Type.floating(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("type_specifier",33, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3036,7 +3053,7 @@ RESULT = (Type)t;
 		Location snxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location snxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Sname sn = (Sname)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG20
+		//@@CUPDBG23
  Symb s = sn.rs; 
 			   if(s == null) RESULT = Type.reference(Type.forwardName(sn.name, parser.lexer.current_lexeme())); 
 			   else RESULT = Type.reference(s.getType());
@@ -3094,7 +3111,11 @@ RESULT = (Type)t;
           case 98: // variable_declarators ::= variable_declarator 
             {
               Object RESULT =null;
-
+		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG24
+ RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_declarators",34, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3103,7 +3124,11 @@ RESULT = (Type)t;
           case 99: // variable_declarators ::= variable_declarators COMMA variable_declarator 
             {
               Object RESULT =null;
-
+		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG25
+ RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_declarators",34, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3112,7 +3137,11 @@ RESULT = (Type)t;
           case 100: // variable_declarator ::= IDENTIFIER bracks_opt variable_initializer_opt 
             {
               Object RESULT =null;
-
+		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG26
+ RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_declarator",28, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3121,7 +3150,11 @@ RESULT = (Type)t;
           case 101: // variable_initializer_opt ::= EQ variable_initializer 
             {
               Object RESULT =null;
-
+		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG27
+ RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_initializer_opt",29, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3130,7 +3163,8 @@ RESULT = (Type)t;
           case 102: // variable_initializer_opt ::= 
             {
               Object RESULT =null;
-
+		//@@CUPDBG28
+ RESULT = Type.voidtype(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_initializer_opt",29, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3139,7 +3173,11 @@ RESULT = (Type)t;
           case 103: // variable_initializer ::= expression 
             {
               Object RESULT =null;
-
+		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG29
+ RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("variable_initializer",30, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3205,7 +3243,7 @@ RESULT = (Type)t;
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG21
+		//@@CUPDBG30
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3215,7 +3253,7 @@ RESULT = (Type)t;
           case 111: // expression ::= testing_expression 
             {
               Object RESULT =null;
-		//@@CUPDBG22
+		//@@CUPDBG31
 RESULT = Type.bool();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3225,7 +3263,7 @@ RESULT = Type.bool();
           case 112: // expression ::= logical_expression 
             {
               Object RESULT =null;
-		//@@CUPDBG23
+		//@@CUPDBG32
 RESULT = Type.bool();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3238,7 +3276,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG24
+		//@@CUPDBG33
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3251,7 +3289,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG25
+		//@@CUPDBG34
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3264,7 +3302,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG26
+		//@@CUPDBG35
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3277,7 +3315,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG27
+		//@@CUPDBG36
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3290,7 +3328,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG28
+		//@@CUPDBG37
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3303,7 +3341,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG29
+		//@@CUPDBG38
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3316,7 +3354,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG30
+		//@@CUPDBG39
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3329,7 +3367,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG31
+		//@@CUPDBG40
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3348,7 +3386,7 @@ RESULT = Type.bool();
           case 122: // expression ::= num_logic_expression 
             {
               Object RESULT =null;
-		//@@CUPDBG32
+		//@@CUPDBG41
 RESULT = Type.bool();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expression",41, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3907,7 +3945,7 @@ RESULT = Type.bool();
           case 184: // literal_expression ::= integer_literal_desc 
             {
               Object RESULT =null;
-		//@@CUPDBG33
+		//@@CUPDBG42
  RESULT = Type.integer();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal_expression",56, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3917,7 +3955,7 @@ RESULT = Type.bool();
           case 185: // literal_expression ::= FLOAT_LITERAL 
             {
               Object RESULT =null;
-		//@@CUPDBG34
+		//@@CUPDBG43
  RESULT = Type.floating();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal_expression",56, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -3927,7 +3965,7 @@ RESULT = Type.bool();
           case 186: // literal_expression ::= STRING_LITERAL 
             {
               Object RESULT =null;
-		//@@CUPDBG35
+		//@@CUPDBG44
  Symb s = Env.get("String", Env.getRoot()); 
 			   if(s == null) RESULT = Type.reference(Type.forwardName("String", parser.lexer.current_lexeme())); 
 			   else RESULT = Type.reference(s.getType());
@@ -3940,8 +3978,11 @@ RESULT = Type.bool();
           case 187: // literal_expression ::= CHARACTER_LITERAL 
             {
               Object RESULT =null;
-		//@@CUPDBG36
- RESULT = Type.character();
+		//@@CUPDBG45
+ Symb s = Env.get("character", Env.getRoot()); 
+			   if(s == null) RESULT = Type.reference(Type.forwardName("character", parser.lexer.current_lexeme())); 
+			   else RESULT = Type.reference(s.getType());
+			
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal_expression",56, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -3950,7 +3991,7 @@ RESULT = Type.bool();
           case 188: // integer_literal_desc ::= INTEGER_LITERAL 
             {
               Object RESULT =null;
-		//@@CUPDBG37
+		//@@CUPDBG46
  RESULT = Type.integer(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("integer_literal_desc",57, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4152,7 +4193,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).xright;
 		Type t = (Type)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
-		//@@CUPDBG38
+		//@@CUPDBG47
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter",64, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4267,10 +4308,12 @@ RESULT = Type.bool();
 		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG39
+		//@@CUPDBG48
 
+		System.out.println((Type)t1);
+		System.out.println((Type)t2);
 		if(!((Type)t1).equals((Type)t2)){
-			System.out.println("Erro semantico");
+			System.err.println("Erro semantico");
 			System.exit(1);
 
 		}
@@ -4291,8 +4334,8 @@ RESULT = Type.bool();
 		Type t1 = (Type)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		Location nxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location nxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
-		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-//@@CUPDBG40
+		java.lang.String n = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+//@@CUPDBG49
  if(parser.first) { if (!Env.put(n, null)) parser.sem_error(n,"DUPLICATE NAME");
 						    System.out.println(" METHOD ENTRY: "+n);
 		 			          Env.push();
@@ -4320,11 +4363,11 @@ RESULT = Type.bool();
 		Type t1 = (Type)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-5)).value;
 		Location nxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).xleft;
 		Location nxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).xright;
-		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
+		java.lang.String n = (java.lang.String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xleft;
 		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xright;
 		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		//@@CUPDBG41
+		//@@CUPDBG50
  if(parser.first) { Name c = Name.getCurrentClass();
 			   			    String cname = c.getName();
 			   			    Symb csymb = Env.get(cname);
@@ -4347,7 +4390,7 @@ RESULT = Type.bool();
           case 225: // parameter_list_opt ::= 
             {
               Object RESULT =null;
-		//@@CUPDBG42
+		//@@CUPDBG51
  RESULT = Type.voidtype(); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter_list_opt",83, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4360,7 +4403,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG43
+		//@@CUPDBG52
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter_list_opt",83, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4373,7 +4416,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG44
+		//@@CUPDBG53
  RESULT = (Type)t; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter_list",77, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4389,7 +4432,7 @@ RESULT = Type.bool();
 		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG45
+		//@@CUPDBG54
  RESULT = Type.product((Type)t1, (Type)t2); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter_list",77, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4402,7 +4445,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG46
+		//@@CUPDBG55
 
 	RESULT = (Type)t; 
 	System.out.println(" METHOD EXIT");
@@ -4420,7 +4463,7 @@ RESULT = Type.bool();
 		Location txleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location txright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG47
+		//@@CUPDBG56
 RESULT = (Type)t;
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("statement_aux",78, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -4430,7 +4473,7 @@ RESULT = (Type)t;
           case 231: // statement_aux ::= SEMI 
             {
               Object RESULT =null;
-		//@@CUPDBG48
+		//@@CUPDBG57
 RESULT = Type.voidtype();
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("statement_aux",78, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

@@ -8,6 +8,8 @@ public interface sym {
   public static final int GT = 38;
   public static final int IMPLEMENTS = 10;
   public static final int SSHIFT = 51;
+  public static final String NOME = "ASD";
+  public static final boolean BOLEANO = true;
   public static final int NOTEQ = 43;
   public static final int PLUSEQ = 33;
   public static final int SEMI = 2;
@@ -110,14 +112,19 @@ public interface sym {
 
 class Driver {
 
-	public boolean leo(){
+	public boolean metodo1(){
 		System.out.println(72+72);
 		return true;
 	}
-	public int MINUSEQ = 34;
+	public int MINUSEQ = 2;
 	
-	public int leoasdasd(){
+	public int metodo2(){
 		System.out.println(72+72);
-		return 1;
+		return 2;
+	}
+	
+	public character metodo3(){
+		System.out.println(72+72);
+		return 'a';
 	}
 }

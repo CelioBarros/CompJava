@@ -94,11 +94,6 @@ FLit2    = \. [0-9]+
 FLit3    = [0-9]+ 
 Exponent = [eE] [+-]? [0-9]+
 
-/* string and character literals */
-StringCharacter = [^\r\n\"\\]
-SingleCharacter = [^\r\n\'\\]
-
-%state STRING, CHARLITERAL
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
@@ -110,12 +105,16 @@ DocumentationComment = "/*" "*"+ [^/*] ~"*/"
 
 ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
-
 %eofval{
     return symbolFactory.newSymbol("EOF",sym.EOF);
 %eofval}
 
-%state CODESEG
+/* string and character literals */
+StringCharacter = [^\r\n\"\\]
+SingleCharacter = [^\r\n\'\\]
+
+
+%state STRING, CHARLITERAL
 
 %%  
 
@@ -220,14 +219,15 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "interface"  { return symbolFactory.newSymbol("INTERFACE", INTERFACE); }
   {Comment}    { /* ignore */ }
   {ident}      { return symbolFactory.newSymbol("IDENTIFIER", IDENTIFIER, yytext().toString()); }
-}
-
-/* string literal */
+  
+  /* string literal */
   \"                             { yybegin(STRING); string.setLength(0); }
 
   /* character literal */
   \'                             { yybegin(CHARLITERAL); }
   
+}
+
 <STRING> {
   \"                             { yybegin(YYINITIAL); return symbolFactory.newSymbol("STRING_LITERAL", STRING_LITERAL, string.toString()); }
   
