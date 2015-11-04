@@ -37,24 +37,24 @@ public class Env  {
 	top = (Env)newEnvs.get(envCounter);
 	put("printf", new Symb(Type.method(Type.voidtype(), Type.voidtype()), null, true));
 	put("scanf", new Symb(Type.method(Type.voidtype(), Type.voidtype()), null, true));
-	System.out.println(" "+top);
+	//System.out.println(" "+top);
   }
 
   public static void initSecond() {
 	envCounter = 0;
 	top = (Env)newEnvs.get(envCounter);
-	System.out.println(" "+top);
+	//System.out.println(" "+top);
   }
 
   public static void next() {
 	envCounter++;
 	top = (Env)newEnvs.get(envCounter);
-	System.out.println(" "+top);
+	//System.out.println(" "+top);
   }
 
   public static int putClass(String c, boolean p) {
-	  System.out.println(c+" 1");
-		System.out.println(p);
+	  //System.out.println(c+" 1");
+		//System.out.println(p);
 	Name cName = Type.getName(c);
 	if((cName != null) && !Name.isForward(c)) { push();
 	  			 	 			  return 1;
@@ -64,7 +64,7 @@ public class Env  {
 	  	 cName = Type.putName(c, null, top);
 	  	 Symb s = new Symb(cName, cName, p);
 	  	 current.table.put(c, s);
-		 System.out.println("   PUT "+c+" IN "+current);
+		 //System.out.println("   PUT "+c+" IN "+current);
 	  	 return 0;
 	}    
   }
@@ -86,9 +86,9 @@ public class Env  {
 			  cName = Type.putName(c, sc, top);
 			  Symb s = new Symb(cName, cName, p);
 			  current.table.put(c, s);
-			  System.out.println("   PUT "+c+" IN "+current);
+			  //System.out.println("   PUT "+c+" IN "+current);
 			  root.table.put(c,s);
-		 	  System.out.println("   PUT "+c+" IN "+root);
+		 	  //System.out.println("   PUT "+c+" IN "+root);
 			  return 0;
 		 }
 	}    
@@ -97,7 +97,7 @@ public class Env  {
   public static boolean put(String name, Symb s) {
 	if(!top.table.containsKey(name)) {
 	  top.table.put(name,s);
-	  System.out.println("   PUT "+name+" IN "+top);
+	  //System.out.println("   PUT "+name+" IN "+top);
 	  return true;
 	}
 	return false;    
@@ -106,14 +106,14 @@ public class Env  {
   public static void putSymb(String name, Symb s) {
  	Env e = top.prev;
 	e.table.put(name,s);
-	System.out.println("   CHANGED "+name+" IN "+e);   
+	//System.out.println("   CHANGED "+name+" IN "+e);   
   }
 
   public static boolean putVar(String name, Symb s) {
 	if(!top.table.containsKey(name)) {
 	  top.table.put(name,s);
 	  top.vars.add(name);
-	  System.out.println("   PUT VARIABLE "+name+" IN "+top);
+	  //System.out.println("   PUT VARIABLE "+name+" IN "+top);
 	  return true;
 	}
 	return false;    
@@ -135,7 +135,7 @@ public class Env  {
 	envCounter++;
 	top = new Env(e);
 	newEnvs.add(envCounter, top);
-	System.out.println(" "+top);
+	//System.out.println(" "+top);
   }
 
   public static void push() {
@@ -146,7 +146,7 @@ public class Env  {
 	top = top.prev;
 	envCounter++;
 	newEnvs.add(envCounter, top);
-	System.out.println(" "+top);
+	//System.out.println(" "+top);
   }
 
   public String toString() {

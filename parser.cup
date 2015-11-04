@@ -22,17 +22,23 @@ if (info instanceof java_cup.runtime.Symbol) {
            token = s.value+"";
  
        }
-       System.err.println("Erro em: " + token);
+       System.err.println("Error in: " + token);
  }
  
  public void report_fatal_error(String message, Object info) {
    report_error(message, info);
-   throw new RuntimeException("Erro Sintatico.");
+   throw new RuntimeException("syntactic error");
  }
   public void sem_error(String lexeme, String message) {
         errors++;
         System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
       System.err.println("  "+ errors + "==> " + message + ": "+ lexeme + "\n");
+  }
+
+  public void sem_error_2(String message) {
+        errors++;
+        System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
+      System.err.println("  "+ errors + "==> " + message + "\n");
   }
  
   public void warning(String lexeme, String message) {
@@ -330,11 +336,8 @@ continue_opt ::= CONTINUE SEMI
         ;
        
 variable_declaration ::= modifiers_opt type:t1 variable_declarators:t2 SEMI {:
-System.out.println((Type)t1);
-System.out.println((Type)t2);
-                if(!((Type)t1).equals((Type)t2)){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                if((!((Type)t1).equals((Type)t2)) && (!((Type)t2).equals(Type.voidtype()))){
+                        parser.sem_error_2("VARIABLE DECLARATION");
  
                 }
 :}
@@ -444,8 +447,7 @@ num_const ::= PLUS
 testing_expression ::= expression:t1 test_const expression:t2 {:
        
                 if((!((Type)t1).equals((Type)t2)) || !((Type)t1).isNumber() || !((Type)t2).isNumber()){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                        parser.sem_error_2("EXPRESSION");
  
                 }
                 RESULT = Type.bool();
@@ -552,8 +554,7 @@ while_statement ::= WHILE LPAREN expression RPAREN statement
        
 for_statement ::= FOR LPAREN for_var_exp expression_opt:t2 SEMI expression_opt SEMI RPAREN statement {:
         if(!((Type)t2).equals(Type.bool()) && !((Type)t2).equals(Type.voidtype())) {
-                System.err.println("Erro semantico");
-                System.exit(1);
+                parser.sem_error_2("DECLARATION FOR");
 }
 :}
         ;
@@ -604,11 +605,8 @@ mcv_declarations ::= method_declaration
         ;
        
 method_declaration ::= method_header:t1 method_body:t2 {:
-                System.out.println((Type)t1);
-                System.out.println((Type)t2);
                 if(!((Type)t1).equals((Type)t2)){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                        parser.sem_error_2("METHOD DECLARATION");
  
                 }
         :}

@@ -2036,17 +2036,23 @@ if (info instanceof java_cup.runtime.Symbol) {
            token = s.value+"";
  
        }
-       System.err.println("Erro em: " + token);
+       System.err.println("Error in: " + token);
  }
  
  public void report_fatal_error(String message, Object info) {
    report_error(message, info);
-   throw new RuntimeException("Erro Sintatico.");
+   throw new RuntimeException("syntactic error");
  }
   public void sem_error(String lexeme, String message) {
         errors++;
         System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
       System.err.println("  "+ errors + "==> " + message + ": "+ lexeme + "\n");
+  }
+
+  public void sem_error_2(String message) {
+        errors++;
+        System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
+      System.err.println("  "+ errors + "==> " + message + "\n");
   }
  
   public void warning(String lexeme, String message) {
@@ -2945,11 +2951,8 @@ RESULT = (Type)t;
 		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		//@@CUPDBG17
 
-System.out.println((Type)t1);
-System.out.println((Type)t2);
-                if(!((Type)t1).equals((Type)t2)){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                if((!((Type)t1).equals((Type)t2)) && (!((Type)t2).equals(Type.voidtype()))){
+                        parser.sem_error_2("VARIABLE DECLARATION");
  
                 }
 
@@ -3595,8 +3598,7 @@ RESULT = Type.bool();
 
        
                 if((!((Type)t1).equals((Type)t2)) || !((Type)t1).isNumber() || !((Type)t2).isNumber()){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                        parser.sem_error_2("EXPRESSION");
  
                 }
                 RESULT = Type.bool();
@@ -4103,8 +4105,7 @@ RESULT = Type.bool();
 		//@@CUPDBG45
 
         if(!((Type)t2).equals(Type.bool()) && !((Type)t2).equals(Type.voidtype())) {
-                System.err.println("Erro semantico");
-                System.exit(1);
+                parser.sem_error_2("DECLARATION FOR");
 }
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("for_statement",66, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -4330,11 +4331,8 @@ RESULT = Type.voidtype();
 		Object t2 = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		//@@CUPDBG49
 
-                System.out.println((Type)t1);
-                System.out.println((Type)t2);
                 if(!((Type)t1).equals((Type)t2)){
-                        System.err.println("Erro semantico");
-                        System.exit(1);
+                        parser.sem_error_2("METHOD DECLARATION");
  
                 }
         

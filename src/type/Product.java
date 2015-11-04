@@ -8,7 +8,7 @@ public class Product extends Type {
 		super(PRODUCT, l.getWidth() + r.getWidth(), l.getCode()+", "+r.getCode());
 		left = l;
 		right = r;
-		System.out.println("   NEW PRODUCT: "+this+" (LEFT: "+left+", RIGHT: "+right+", WIDTH: "+width+")");
+		//System.out.println("   NEW PRODUCT: "+this+" (LEFT: "+left+", RIGHT: "+right+", WIDTH: "+width+")");
 	}
 
 	public String toString(){

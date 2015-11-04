@@ -7,7 +7,7 @@ public class Reference extends Type {
 	protected Reference(Type r) {
 		super(REFERENCE, 4, r.getCode()+" *");
 		referred = r;
-		System.out.println("   NEW REFERENCE: "+this+" (REFERRED: "+referred+", WIDTH: "+width+")");
+		//System.out.println("   NEW REFERENCE: "+this+" (REFERRED: "+referred+", WIDTH: "+width+")");
 	}
 
 	public Type getReferred(){

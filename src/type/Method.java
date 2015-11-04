@@ -11,7 +11,7 @@ public class Method extends Type {
 		domain = d;
 		range = r;
 		current = this;
-		System.out.println("   NEW METHOD: "+this+" (DOMAIN: "+domain+", RANGE: "+range+")");
+		//System.out.println("   NEW METHOD: "+this+" (DOMAIN: "+domain+", RANGE: "+range+")");
 	}
 
 	public Type getDomain(){
@@ -30,7 +30,7 @@ public class Method extends Type {
 		current = m;
 		Type d = m.getDomain();
 		Type r = m.getRange();
-		System.out.println("   CURRENT METHOD: "+n+", type: "+m+" (DOMAIN: "+d+", RANGE: "+r+")");
+		//System.out.println("   CURRENT METHOD: "+n+", type: "+m+" (DOMAIN: "+d+", RANGE: "+r+")");
 	}
 
 	public String toString(){

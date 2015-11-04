@@ -18,7 +18,7 @@ public class Name extends Type {
 		supername = s;
 		env = e;
 		current = this;
-		System.out.println("   NEW CLASS: "+this+" (NAME: "+name+", SUPER: "+supername+", ENV: e"+env.getCounter()+")");
+		//System.out.println("   NEW CLASS: "+this+" (NAME: "+name+", SUPER: "+supername+", ENV: e"+env.getCounter()+")");
 	}
 
 	protected Name(String n, String lexeme) {
@@ -27,7 +27,7 @@ public class Name extends Type {
 		supername = null;
 		env = null;
 		forwards.put(n, lexeme);
-		System.out.println("   FORWARD REFERENCE: "+this+" (NAME: "+name+", SUPER: "+supername+", ENV: e"+env+")");
+		//System.out.println("   FORWARD REFERENCE: "+this+" (NAME: "+name+", SUPER: "+supername+", ENV: e"+env+")");
 	}
 
 	public static Name getCurrentClass(){
@@ -39,7 +39,7 @@ public class Name extends Type {
 		String n = c.getName();
 		String s = c.getSuper();
 		Env e = c.getEnv();
-		System.out.println("   CURRENT CLASS: "+c+" (NAME: "+n+", SUPER: "+s+", ENV: e"+e.getCounter()+")");
+		//System.out.println("   CURRENT CLASS: "+c+" (NAME: "+n+", SUPER: "+s+", ENV: e"+e.getCounter()+")");
 	}
 
 	public static boolean isForward(String n){

@@ -9,7 +9,7 @@ public class Array extends Type {
 		super(ARRAY, s * b.getWidth(), "["+s+" x "+b.getCode()+" ]");
 		size = s;
 		base = b;
-		System.out.println("   NEW ARRAY: "+this+" (SIZE: "+size+", BASE: "+base+", WIDTH: "+width+")");
+		//System.out.println("   NEW ARRAY: "+this+" (SIZE: "+size+", BASE: "+base+", WIDTH: "+width+")");
 	}
 
 	public int getSize(){

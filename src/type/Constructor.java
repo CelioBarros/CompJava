@@ -8,7 +8,7 @@ public class Constructor extends Type {
 		super(CONSTRUCTOR, 0, r.getCode()+" ("+d.getCode()+")");
 		domain = d;
 		range = r;
-		System.out.println("   NEW CONSTRUCTOR: "+this+" (DOMAIN: "+domain+", RANGE: "+range+")");
+		//System.out.println("   NEW CONSTRUCTOR: "+this+" (DOMAIN: "+domain+", RANGE: "+range+")");
 	}
 
 	public Type getDomain(){

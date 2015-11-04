@@ -39,7 +39,7 @@ public class Type {
 
 	public void putWidth(int w) {
 		width = w;
-		System.out.println("  UPDATED WIDTH: "+this+" (WIDTH: "+width+")");
+		//System.out.println("  UPDATED WIDTH: "+this+" (WIDTH: "+width+")");
 	}
 
 	public static void initTypes(){
@@ -214,11 +214,11 @@ public class Type {
 		TreeMap tm = new TreeMap(types);
 		Set tMap = tm.entrySet();
 		Iterator it = tMap.iterator();
-		System.out.println("\nTypes: ");
+		//System.out.println("\nTypes: ");
 		while(it.hasNext()) { Map.Entry entry = (Map.Entry)it.next();
 					    String key = (String)entry.getKey();
 					    Type value = (Type)entry.getValue();
-					    System.out.println("      "+key+" = "+value.typeString());
+					    //System.out.println("      "+key+" = "+value.typeString());
 		}		
 	}
 	
