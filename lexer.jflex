@@ -44,8 +44,7 @@ import java.io.InputStreamReader;
     }
       public String current_lexeme(){
     int l = yyline+1;
-    int c = yycolumn+1;
-    return " (line: "+l+" , column: "+c+" , lexeme: '"+yytext()+"')";
+    return " (line: "+l+" , lexeme: '"+yytext()+"')";
   }
     
     
