@@ -14,7 +14,7 @@ public interface sym {
   public static final int IMPLEMENTS = 10;
   public static final int SSHIFT = 51;
   public static final int NOTEQ = 43;
-  public static final int PLUSEQ = 33;
+  public static final int PLUSEQ = 32;
   public static final int SEMI = 2;
   public static final int RBRACK = 24;
   public static final int CATCH = 91;
@@ -49,7 +49,7 @@ public interface sym {
   public static final int TRUE = 56;
   public static final int NATIVE = 17;
   public static final int LONG = 71;
-  public static final int PLUS = 31;
+  public static final int PLUS = 37;
   public static final int QUESTION = 58;
   public static final int WHILE = 88;
   public static final int EXTENDS = 9;
@@ -60,7 +60,7 @@ public interface sym {
   public static final int FOR = 89;
   public static final int DO = 87;
   public static final int RSHIFTEQ = 49;
-  public static final int DIV = 36;
+  public static final int DIV = 35;
   public static final int PUBLIC = 11;
   public static final int RETURN = 44;
   public static final int MULT = 7;
@@ -78,7 +78,7 @@ public interface sym {
   public static final int EOF = 0;
   public static final int THIS = 83;
   public static final int DEFAULT = 95;
-  public static final int MULTEQ = 35;
+  public static final int MULTEQ = 34;
   public static final int IMPORT = 6;
   public static final int OROREQ = 65;
   public static final int MINUS = 29;
@@ -87,7 +87,7 @@ public interface sym {
   public static final int OR = 62;
   public static final int error = 1;
   public static final int SYNCHRONIZED = 18;
-  public static final int DIVEQ = 37;
+  public static final int DIVEQ = 36;
   public static final int FINALLY = 92;
   public static final int CONTINUE = 47;
   public static final int IF = 85;
@@ -100,7 +100,7 @@ public interface sym {
   public static final int VOLATILE = 20;
   public static final int OREQ = 64;
   public static final int CASE = 94;
-  public static final int PLUSPLUS = 32;
+  public static final int PLUSPLUS = 31;
   public static final int HEX_LITERAL_LONG = 77;
   public static final int NEW = 55;
   public static final int RSHIFT = 50;
@@ -109,7 +109,7 @@ public interface sym {
   public static final int STATIC = 14;
   public static final int LSHIFT = 52;
   public static final int XOR = 74;
-  public static final int MINUSEQ = 34;
+  public static final int MINUSEQ = 33;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -142,13 +142,13 @@ public interface sym {
   "NOT",
   "MINUS",
   "MINUSMINUS",
-  "PLUS",
   "PLUSPLUS",
   "PLUSEQ",
   "MINUSEQ",
   "MULTEQ",
   "DIV",
   "DIVEQ",
+  "PLUS",
   "GT",
   "LT",
   "GTEQ",

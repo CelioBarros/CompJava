@@ -1,5 +1,6 @@
 package cup.example;
 
+import assembly.GeradorAssembly;
 import java_cup.runtime.*;
 
 class Driver {
@@ -15,6 +16,7 @@ class Driver {
 
 		Parser parser = new Parser();
 		parser.parse();
+		GeradorAssembly.getInstance().generateAssembly();
 	}
 	
 }

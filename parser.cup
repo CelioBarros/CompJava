@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import type.*;
 import symtab.*;
+import assembly.*;
  
 parser code {:
   protected Lexer lexer;
@@ -90,7 +91,7 @@ scan with {: return lexer.next_token(); :};
 terminal            SEMI, PACKAGE, POINT, COMMA, IMPORT, MULT, CLASS, EXTENDS, IMPLEMENTS;
 terminal                        PUBLIC, PROTECTED, PRIVATE, STATIC, ABSTRACT, FINAL, NATIVE, SYNCHRONIZED;
 terminal                        TRANSIENT, VOLATILE, LBRACE, RBRACE, LBRACK, RBRACK, EQ, MOD, MODEQ, NOT;
-terminal                        MINUS, MINUSMINUS, PLUS, PLUSPLUS, PLUSEQ, MINUSEQ, MULTEQ, DIV, DIVEQ;
+terminal                        MINUS, MINUSMINUS, PLUSPLUS, PLUSEQ, MINUSEQ, MULTEQ, DIV, DIVEQ,PLUS;
 terminal                        GT, LT, GTEQ, LTEQ, EQEQ, NOTEQ;
 terminal                        RETURN, THROW, BREAK, CONTINUE;
 terminal                        COMP, RSHIFTEQ, RSHIFT, SSHIFT, LSHIFT, LPAREN, RPAREN, NEW;
@@ -133,7 +134,7 @@ non terminal                    for_statement, for_var_exp, expression_opt, try_
 non terminal                    statements_switch_opt, statements_switch, statement_switch, arglist_opt;
 non terminal                    mcv_declarations, parameter_list, statement_aux, method_declaration;
 non terminal                    constructor_declaration, interface_declaration, inter_opt, parameter_list_opt;
-non terminal                    method_header, method_body;
+non terminal                    method_header, method_body, paren_expression, boolean_literal;
 non terminal Type type;
 non terminal Boolean modifiers_opt;
 non terminal Sname name;
@@ -336,17 +337,18 @@ continue_opt ::= CONTINUE SEMI
         ;
        
 variable_declaration ::= modifiers_opt type:t1 variable_declarators:t2 SEMI {:
+
                 if((!((Type)t1).equals((Type)t2)) && (!((Type)t2).equals(Type.voidtype()))){
                         parser.sem_error_2("VARIABLE DECLARATION");
- 
                 }
+				
 :}
         ;
  
 type ::= type_specifier:t bracks_opt
         {: RESULT = (Type)t; :}
         ;
-       
+        
 type_specifier ::= BOOLEAN {: RESULT = Type.bool(); :}
         | BYTE
         | CHAR {: RESULT = Type.character(); :}
@@ -361,6 +363,7 @@ type_specifier ::= BOOLEAN {: RESULT = Type.bool(); :}
                            else RESULT = Type.reference(s.getType());
                         :}
         ;
+       
        
 bracks_opt ::= bracks
         |
@@ -380,12 +383,12 @@ variable_declarators ::= variable_declarator:t
         ;
        
 variable_declarator ::=
-                IDENTIFIER bracks_opt variable_initializer_opt:t
-                {: RESULT = (Type)t; :}
+                IDENTIFIER:n bracks_opt variable_initializer_opt:t
+                {: RESULT = (Type)t; GeradorAssembly.getInstance().Storage(n,GeradorAssembly.getInstance().getLiteralAtual()); :}
         ;
  
 variable_initializer_opt ::= EQ variable_initializer:t {: RESULT = (Type)t; :}
-        | {: RESULT = Type.voidtype(); :}
+        | {: RESULT = Type.voidtype(); GeradorAssembly.getInstance().setLiteralAtual(""); :}
         ;
  
 variable_initializer ::= expression:t {: RESULT = (Type)t; :}
@@ -426,21 +429,57 @@ num_logic_expression ::= expression MODEQ expression
         | expression MOD expression
         ;    
      
-numeric_expression ::= MINUS expression
-      | PLUSPLUS expression
-      | MINUSMINUS expression
-      | expression PLUSPLUS
-      | expression MINUSMINUS
-      | expression num_const expression
+numeric_expression ::= MINUS expression {: RESULT = Type.integer();:} 
+      | PLUSPLUS expression  {: RESULT = Type.integer();:}
+      | MINUSMINUS expression  {: RESULT = Type.integer();:}
+      | expression PLUSPLUS  {: RESULT = Type.integer();:}
+      | expression MINUSMINUS  {: RESULT = Type.integer();:}
+      | expression:t1 num_const:n expression:t2 {: 
+				if((!((Type)t1).equals((Type)t2))){
+					parser.sem_error_2("EXPRESSION");
+				}else if(((Type)t1).isNumber()){
+					RESULT = Type.integer();
+				}else{
+					RESULT = Type.reference(Type.forwardName("String", parser.lexer.current_lexeme()));
+				}
+				
+				String valB = GeradorAssembly.getInstance().getLiteralAtual();
+    			String valA = GeradorAssembly.getInstance().getLiteralAtual();
+				String reg1 = GeradorAssembly.getInstance().Load(valA);
+				String reg2 = GeradorAssembly.getInstance().Load(valB);
+				String valPut = "";  
+			if(n.equals("PLUS")){
+				GeradorAssembly.getInstance().ADD(reg1,reg2);
+				try{
+					valPut = String.valueOf(Integer.parseInt(valA) + Integer.parseInt(valB));
+				} catch (Exception e){ valPut = valA+valB; }
+			} else if(n.equals("MINUS")){
+				GeradorAssembly.getInstance().SUB(reg1,reg2);
+				try{
+					valPut = String.valueOf(Integer.parseInt(valA) - Integer.parseInt(valB));
+				} catch (Exception e){}
+			} else if(n.equals("MULT")){
+				GeradorAssembly.getInstance().MUL(reg1,reg2);
+				try{
+				valPut = String.valueOf(Integer.parseInt(valA) * Integer.parseInt(valB));
+				} catch (Exception e){}
+			} else if(n.equals("DIV")){
+				GeradorAssembly.getInstance().DIV(reg1,reg2);
+				try {
+				valPut = String.valueOf(Integer.parseInt(valA) / Integer.parseInt(valB));
+				} catch (Exception e){}
+			}
+			GeradorAssembly.getInstance().setLiteralAtual(valPut);
+		:}
       ;
  
-num_const ::= PLUS
+num_const ::= PLUS {: RESULT = sym.terminalNames[sym.PLUS]; :}
       | PLUSEQ
-      | MINUS
+      | MINUS {: RESULT = sym.terminalNames[sym.MINUS]; :}
       | MINUSEQ
-      | MULT
+      | MULT {: RESULT = sym.terminalNames[sym.MULT]; :}
       | MULTEQ
-      | DIV
+      | DIV {: RESULT = sym.terminalNames[sym.DIV]; :}
       | DIVEQ
       ;
      
@@ -465,8 +504,8 @@ test_const ::= GT
 logical_expression ::= NOT expression
       | expression logical_const expression
       | expression QUESTION expression COLON expression
-      | TRUE
-      | FALSE
+      | TRUE {: GeradorAssembly.getInstance().setLiteralAtual("true"); :}
+      | FALSE {: GeradorAssembly.getInstance().setLiteralAtual("false"); :}
       ;
      
 logical_const ::= AMPERSAND
@@ -518,21 +557,23 @@ array_expression_opt ::= LBRACK expression RBRACK
        
  
 literal_expression ::= integer_literal_desc {: RESULT = Type.integer();:}
-    | FLOAT_LITERAL {: RESULT = Type.floating();:}
-    | STRING_LITERAL
+    | FLOAT_LITERAL:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.floating();:}
+    | STRING_LITERAL:value
     {: Symb s = Env.get("String", Env.getRoot());
+							GeradorAssembly.getInstance().setLiteralAtual(value.toString());
                            if(s == null) RESULT = Type.reference(Type.forwardName("String", parser.lexer.current_lexeme()));
                            else RESULT = Type.reference(s.getType());
                         :}
-    | CHARACTER_LITERAL    {: Symb s = Env.get("character", Env.getRoot());
+    | CHARACTER_LITERAL:value    {: Symb s = Env.get("character", Env.getRoot());
+							GeradorAssembly.getInstance().setLiteralAtual(value.toString());
                            if(s == null) RESULT = Type.reference(Type.forwardName("character", parser.lexer.current_lexeme()));
                            else RESULT = Type.reference(s.getType());
                         :}
     ;
      
  
-integer_literal_desc ::= INTEGER_LITERAL {: RESULT = Type.integer(); :}
-        | INTEGER_LITERAL_LONG
+integer_literal_desc ::= INTEGER_LITERAL:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.integer(); :}
+        | INTEGER_LITERAL_LONG:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); :}
         | HEX_LITERAL
         | HEX_LITERAL_LONG
         | OCT_LITERAL

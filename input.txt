@@ -20,7 +20,10 @@ public class Driver {
 	public void teste123(){}
 	
 	public character metodo3(){
-		System.out.println(72+72);
+		System.out.println(72+45);
+		System.out.println(72-45);
+		System.out.println(7*5);
+		System.out.println(4/2);
 		return 'a';
 	}
 	
@@ -30,7 +33,7 @@ public class Driver {
 	
 	public int metodo4() {
 		for (int i = 0; true; i++;) {}
-		return 23;		
+		return 34+112;
 	}
 }
 
