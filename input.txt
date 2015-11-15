@@ -2,6 +2,7 @@ public interface sym {
   /* terminals */
   public static final int IMPLEMENTS;
   public static final int SSHIFT = 51;
+  public static final int soma = 51+12;
   public static final String NOME = "ASD";
   public static final boolean BOLEANO = true;
 }
@@ -14,7 +15,7 @@ public class Driver {
 	
 	public boolean metodo2(){
 		int MINUSEQ = 2;
-		return 3>2;
+		return true;
 	}
 	
 	public void teste123(){}
@@ -32,7 +33,7 @@ public class Driver {
 	}
 	
 	public int metodo4() {
-		for (int i = 0; true; i++;) {}
+		for (int i = 0; i < 3; i++;) {}
 		return 34+112;
 	}
 }

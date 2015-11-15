@@ -34,12 +34,14 @@ if (info instanceof java_cup.runtime.Symbol) {
         errors++;
         System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
       System.err.println("  "+ errors + "==> " + message + ": "+ lexeme + "\n");
+	System.exit(0);
   }
 
   public void sem_error_2(String message) {
         errors++;
         System.err.println("Error "+ lexer.current_lexeme() + " : Semantic error");
       System.err.println("  "+ errors + "==> " + message + "\n");
+	System.exit(0);
   }
  
   public void warning(String lexeme, String message) {
@@ -337,11 +339,10 @@ continue_opt ::= CONTINUE SEMI
         ;
        
 variable_declaration ::= modifiers_opt type:t1 variable_declarators:t2 SEMI {:
-
                 if((!((Type)t1).equals((Type)t2)) && (!((Type)t2).equals(Type.voidtype()))){
                         parser.sem_error_2("VARIABLE DECLARATION");
                 }
-				
+		Context.getInstance().getVariaveisDoContexto().get(Context.getInstance().getVariaveisDoContexto().size()-1).setTipo(((Type)t1).toString());	
 :}
         ;
  
@@ -384,11 +385,11 @@ variable_declarators ::= variable_declarator:t
        
 variable_declarator ::=
                 IDENTIFIER:n bracks_opt variable_initializer_opt:t
-                {: RESULT = (Type)t; GeradorAssembly.getInstance().Storage(n,GeradorAssembly.getInstance().getLiteralAtual()); :}
+                {: Context.getInstance().getVariaveisDoContexto().get(Context.getInstance().getVariaveisDoContexto().size()-1).setId(n); RESULT = (Type)t; GeradorAssembly.getInstance().Storage(n,GeradorAssembly.getInstance().getLiteralAtual()); :}
         ;
  
 variable_initializer_opt ::= EQ variable_initializer:t {: RESULT = (Type)t; :}
-        | {: RESULT = Type.voidtype(); GeradorAssembly.getInstance().setLiteralAtual(""); :}
+        | {: Context.getInstance().addVariavel(new Variavel(null, null, null)); GeradorAssembly.getInstance().setLiteralAtual("null"); RESULT = Type.voidtype(); :}
         ;
  
 variable_initializer ::= expression:t {: RESULT = (Type)t; :}
@@ -406,7 +407,7 @@ variable_initializers ::= variable_initializer
        
 expression ::= numeric_expression:t {: RESULT = (Type)t; :}
         | testing_expression:t {: RESULT = (Type)t; :}
-        | logical_expression {:RESULT = Type.bool();:}
+        | logical_expression:t {:RESULT = (Type)t; :}
         | string_expression:t {: RESULT = (Type)t; :}
     | bit_expression:t {: RESULT = (Type)t; :}
     | casting_expression:t {: RESULT = (Type)t; :}
@@ -415,8 +416,8 @@ expression ::= numeric_expression:t {: RESULT = (Type)t; :}
     | NULL
         | SUPER
         | THIS
-    | IDENTIFIER
-    | num_logic_expression {:RESULT = Type.bool();:}
+    | IDENTIFIER:n {: RESULT = n;:}
+    | num_logic_expression {:RESULT = Type.bool(); :}
     | expression LPAREN RPAREN
     | expression LPAREN arglist RPAREN
     | expression LBRACK expression RBRACK
@@ -469,7 +470,8 @@ numeric_expression ::= MINUS expression {: RESULT = Type.integer();:}
 				valPut = String.valueOf(Integer.parseInt(valA) / Integer.parseInt(valB));
 				} catch (Exception e){}
 			}
-			GeradorAssembly.getInstance().setLiteralAtual(valPut);
+			Context.getInstance().addVariavel(new Variavel(null, null, valPut));
+//			GeradorAssembly.getInstance().setLiteralAtual(valPut);
 		:}
       ;
  
@@ -483,18 +485,42 @@ num_const ::= PLUS {: RESULT = sym.terminalNames[sym.PLUS]; :}
       | DIVEQ
       ;
      
-testing_expression ::= expression:t1 test_const expression:t2 {:
-       
+testing_expression ::= expression:t1 test_const:t expression:t2 {:
+					
+					try{
+					Variavel varT1 = Context.getInstance().getVariavel(t1.toString());
+						if(varT1.getTipo() != null){
+							t1 = Integer.parseInt(varT1.getTipo());
+							t1 = Type.integer();
+							GeradorAssembly.getInstance().setLiteralAtual(varT1.getValor().toString());
+						}
+					}catch(Exception e){}
+					try{
+					Variavel varT2 = Context.getInstance().getVariavel(t2.toString());
+					if(varT2.getTipo() != null){
+						t2 = Integer.parseInt(varT2.getTipo());
+						t2 = Type.integer();
+						GeradorAssembly.getInstance().setLiteralAtual(varT2.getValor().toString());
+					}
+					}catch(Exception e){}
+				
                 if((!((Type)t1).equals((Type)t2)) || !((Type)t1).isNumber() || !((Type)t2).isNumber()){
                         parser.sem_error_2("EXPRESSION");
  
                 }
+
+				String valB = GeradorAssembly.getInstance().getLiteralAtual();
+    			String valA = GeradorAssembly.getInstance().getLiteralAtual();
+    			String reg1 = GeradorAssembly.getInstance().Load(valA);
+    			String reg2 = GeradorAssembly.getInstance().Load(valB);
+				
+				GeradorAssembly.getInstance().expressaoRelacional(t.toString(),reg1,reg2);
                 RESULT = Type.bool();
 :}
         ;
        
-test_const ::= GT
-        | LT
+test_const ::= GT {: RESULT = "maior"; :}
+        | LT {: RESULT = "menor"; :}
         | GTEQ
         | LTEQ
         | EQEQ
@@ -502,10 +528,10 @@ test_const ::= GT
         ;
        
 logical_expression ::= NOT expression
-      | expression logical_const expression
+      | expression:v1 logical_const expression:v2 {: RESULT = Type.bool(); :}
       | expression QUESTION expression COLON expression
-      | TRUE {: GeradorAssembly.getInstance().setLiteralAtual("true"); :}
-      | FALSE {: GeradorAssembly.getInstance().setLiteralAtual("false"); :}
+      | TRUE {: RESULT = Type.bool(); GeradorAssembly.getInstance().setLiteralAtual("true"); :}
+      | FALSE {: RESULT = Type.bool(); GeradorAssembly.getInstance().setLiteralAtual("false"); :}
       ;
      
 logical_const ::= AMPERSAND
@@ -557,23 +583,25 @@ array_expression_opt ::= LBRACK expression RBRACK
        
  
 literal_expression ::= integer_literal_desc {: RESULT = Type.integer();:}
-    | FLOAT_LITERAL:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.floating();:}
+    | FLOAT_LITERAL:value {: Context.getInstance().addVariavel(new Variavel(null, null, value.toString())); GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.floating();:}
     | STRING_LITERAL:value
     {: Symb s = Env.get("String", Env.getRoot());
-							GeradorAssembly.getInstance().setLiteralAtual(value.toString());
                            if(s == null) RESULT = Type.reference(Type.forwardName("String", parser.lexer.current_lexeme()));
                            else RESULT = Type.reference(s.getType());
+						GeradorAssembly.getInstance().setLiteralAtual(value.toString());
+ 						Context.getInstance().addVariavel(new Variavel(null, null, value.toString())); 
                         :}
     | CHARACTER_LITERAL:value    {: Symb s = Env.get("character", Env.getRoot());
-							GeradorAssembly.getInstance().setLiteralAtual(value.toString());
                            if(s == null) RESULT = Type.reference(Type.forwardName("character", parser.lexer.current_lexeme()));
                            else RESULT = Type.reference(s.getType());
+						GeradorAssembly.getInstance().setLiteralAtual(value.toString());
+						Context.getInstance().addVariavel(new Variavel(null, null, value.toString()));
                         :}
     ;
      
  
-integer_literal_desc ::= INTEGER_LITERAL:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.integer(); :}
-        | INTEGER_LITERAL_LONG:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); :}
+integer_literal_desc ::= INTEGER_LITERAL:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); RESULT = Type.integer(); Context.getInstance().addVariavel(new Variavel(null, null, value.toString())); :}
+        | INTEGER_LITERAL_LONG:value {: GeradorAssembly.getInstance().setLiteralAtual(value.toString()); Context.getInstance().addVariavel(new Variavel(null, null, value.toString())); :}
         | HEX_LITERAL
         | HEX_LITERAL_LONG
         | OCT_LITERAL
@@ -594,6 +622,7 @@ while_statement ::= WHILE LPAREN expression RPAREN statement
         ;
        
 for_statement ::= FOR LPAREN for_var_exp expression_opt:t2 SEMI expression_opt SEMI RPAREN statement {:
+		
         if(!((Type)t2).equals(Type.bool()) && !((Type)t2).equals(Type.voidtype())) {
                 parser.sem_error_2("DECLARATION FOR");
 }
@@ -682,6 +711,8 @@ if(parser.first) { if (!Env.put(n, null)) parser.sem_error(n,"DUPLICATE NAME");
                            if(parser.second) { Symb msymb = Env.get(n);
                                                      Method.putCurrent(n, (Method)msymb.getType());                                                  
                            }
+
+						GeradorAssembly.getInstance().declaraMetodo(n);
                         :}
         ;
        
@@ -701,6 +732,7 @@ method_body ::= bracks_opt statement_aux:t
         System.out.println(" METHOD EXIT");
                 if(parser.first) Env.pop();
                 if(parser.second) Env.next();
+		GeradorAssembly.getInstance().retorno();
         :}
  
         ;

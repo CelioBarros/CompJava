@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Stack;
 
-	//Regras de assembly retiradas daqui
-	//http://pt.slideshare.net/mksaad/assembly-language-lecture-5-presentation
 	public class GeradorAssembly {
 		
 	private static GeradorAssembly instance = null;
@@ -90,15 +88,17 @@ import java.util.Stack;
 	public String expressaoRelacional(String operador, String regA, String regB){
 		if(operador.equals("menor")){
 			String regTemp = SUB(regA, regB);
+			result += "BGTZ R" + regTemp + ", L" + label + "\n";		
+		}
+		if(operador.equals("maior")){
+			String regTemp = SUB(regA, regB);
 			result += "BLTZ R" + regTemp + ", L" + label + "\n";
-			
 		}
 		return (reg -1)+"";
-	}
-	
+	}	
 		
 	public void declaraMetodo(String nome){
-		result += ".global " + nome + "\n";
+//		result += ".global " + nome + "\n";
 		result += nome+":" + "\n";
 	}
 	
@@ -106,6 +106,10 @@ import java.util.Stack;
 		result += tab + "CALL " + nome + "\n";
 		callFunction = true;
 
+	}
+	
+	public void retorno(){
+		result += tab + "BR *0(SP) \n";
 	}
 		
 	public void generateAssembly(){
@@ -116,6 +120,7 @@ import java.util.Stack;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		result = "LD SP, #pilhaLen \n" + result;
 		writer.println(result);
 		writer.close();
 	}
